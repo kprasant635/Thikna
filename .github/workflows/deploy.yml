@@ -12,9 +12,16 @@ jobs:
 
     steps:
 
+      # --------------------------------------------------
+      # 1. Get latest code
+      # --------------------------------------------------
       - name: Checkout code
         uses: actions/checkout@v4
 
+
+      # --------------------------------------------------
+      # 2. Setup PHP
+      # --------------------------------------------------
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -22,6 +29,10 @@ jobs:
           extensions: mbstring, pdo_mysql
           tools: composer
 
+
+      # --------------------------------------------------
+      # 3. Install production dependencies ON GITHUB
+      # --------------------------------------------------
       - name: Install Composer dependencies
         run: |
           composer install \
@@ -30,28 +41,52 @@ jobs:
             --prefer-dist \
             --optimize-autoloader
 
+
+      # --------------------------------------------------
+      # 4. Setup SSH
+      # --------------------------------------------------
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.1
         with:
           ssh-private-key: ${{ secrets.HOSTINGER_SSH_KEY }}
 
+
+      # --------------------------------------------------
+      # 5. Add Hostinger to known hosts
+      # --------------------------------------------------
       - name: Add Hostinger to known hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -p ${{ secrets.HOSTINGER_PORT }} \
-            ${{ secrets.HOSTINGER_HOST }} >> ~/.ssh/known_hosts
 
+          ssh-keyscan \
+            -p ${{ secrets.HOSTINGER_PORT }} \
+            ${{ secrets.HOSTINGER_HOST }} \
+            >> ~/.ssh/known_hosts
+
+
+      # --------------------------------------------------
+      # 6. Create deployment package
+      #
+      # IMPORTANT:
+      # vendor is NOT excluded.
+      # It was already installed on GitHub.
+      #
+      # .env and storage remain on Hostinger.
+      # --------------------------------------------------
       - name: Create deployment package
         run: |
           tar \
             --exclude='.git' \
             --exclude='.github' \
             --exclude='node_modules' \
-            --exclude='vendor' \
             --exclude='.env' \
             --exclude='storage' \
             -czf /tmp/skopx-deploy.tar.gz .
 
+
+      # --------------------------------------------------
+      # 7. Upload package to Hostinger
+      # --------------------------------------------------
       - name: Upload deployment package
         run: |
           scp \
@@ -59,6 +94,10 @@ jobs:
             /tmp/skopx-deploy.tar.gz \
             ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }}:/tmp/skopx-deploy.tar.gz
 
+
+      # --------------------------------------------------
+      # 8. Deploy on Hostinger
+      # --------------------------------------------------
       - name: Deploy on Hostinger
         run: |
           ssh \
@@ -69,27 +108,28 @@ jobs:
 
           cd ~/domains/skopx.in/public_html
 
-          echo "Extracting application..."
+          echo "======================================"
+          echo "Extracting Laravel application..."
+          echo "======================================"
+
           tar -xzf /tmp/skopx-deploy.tar.gz
 
           rm -f /tmp/skopx-deploy.tar.gz
 
-          echo "Installing production dependencies..."
-          composer install \
-            --no-dev \
-            --no-interaction \
-            --prefer-dist \
-            --optimize-autoloader
-
+          echo "======================================"
           echo "Clearing Laravel cache..."
+          echo "======================================"
+
           php artisan optimize:clear
 
+          echo "======================================"
           echo "Optimizing Laravel..."
+          echo "======================================"
+
           php artisan optimize
 
-          echo "Creating storage link..."
-          php artisan storage:link || true
-
-          echo "Deployment completed successfully."
+          echo "======================================"
+          echo "Deployment completed successfully!"
+          echo "======================================"
 
           EOF
