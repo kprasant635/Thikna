@@ -1,8 +1,8 @@
 <?php
-
 namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -18,13 +18,18 @@ class HomeController extends Controller
             ['icon' => '🎧', 'title' => 'Support 24x7', 'color' => '#0891b2'],
         ];
 
-        $recentJoinings = [
-            ['name' => 'Ramesh Kumar', 'id' => 'SK012345', 'city' => 'Bhubaneswar', 'date' => '15 Sep', 'avatar' => 'RK'],
-            ['name' => 'Priyanka Sahoo', 'id' => 'SK012344', 'city' => 'Cuttack', 'date' => '15 Sep', 'avatar' => 'PS'],
-            ['name' => 'Amit Patel', 'id' => 'SK012343', 'city' => 'Puri', 'date' => '14 Sep', 'avatar' => 'AP'],
-            ['name' => 'Sushmita Das', 'id' => 'SK012342', 'city' => 'Berhampur', 'date' => '14 Sep', 'avatar' => 'SD'],
-            ['name' => 'Manoj Behera', 'id' => 'SK012341', 'city' => 'Sambalpur', 'date' => '13 Sep', 'avatar' => 'MB'],
-        ];
+        $recentJoinings = User::query()
+            ->latest()
+            ->limit(5)
+            ->get(['id', 'name', 'address', 'referral_code', 'created_at', 'profile_photo'])
+            ->map(fn(User $user): array=> [
+                'name'   => $user->name,
+                'id'     => $user->referral_code ?? 'SK' . str_pad((string) $user->id, 6, '0', STR_PAD_LEFT),
+                'city'   => $user->address ?? 'Address not provided',
+                'date'   => $user->created_at?->format('d M'),
+                'avatar' => $user->profile_photo ?? $user->initials(),
+            ])
+            ->all();
 
         $featuredVideos = [
             ['title' => 'Why SKOP-X?', 'desc' => 'Know the opportunity', 'duration' => '2:45'],
@@ -56,12 +61,12 @@ class HomeController extends Controller
         ];
 
         return view('pages.home', [
-            'categories' => $categories,
+            'categories'     => $categories,
             'recentJoinings' => $recentJoinings,
             'featuredVideos' => $featuredVideos,
-            'topAchievers' => $topAchievers,
-            'birthdays' => $birthdays,
-            'anniversaries' => $anniversaries,
+            'topAchievers'   => $topAchievers,
+            'birthdays'      => $birthdays,
+            'anniversaries'  => $anniversaries,
         ]);
     }
 }

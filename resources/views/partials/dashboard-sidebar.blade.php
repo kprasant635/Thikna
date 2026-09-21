@@ -47,7 +47,7 @@
                 <span class="sidebar-icon">🌟</span>
                 Member Benefits
             </a>
-            <a href="{{ route('business.create') }}"
+            {{-- <a href="{{ route('business.create') }}"
                 class="sidebar-link {{ request()->routeIs('business.create') ? 'active' : '' }}">
                 <span class="sidebar-icon">
                     <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
@@ -58,10 +58,10 @@
                     </svg>
                 </span>
                 Add Listing
-            </a>
+            </a> --}}
         </div>
 
-        <div class="sidebar-section">
+        {{-- <div class="sidebar-section">
             <div class="sidebar-section-label">Explore</div>
             <a href="{{ route('shops.index') }}"
                 class="sidebar-link {{ request()->routeIs('shops.*') ? 'active' : '' }}">
@@ -84,7 +84,7 @@
                 </span>
                 Home Rentals
             </a>
-        </div>
+        </div> --}}
 
         <div class="sidebar-section sidebar-bottom-section">
             <form method="POST" action="{{ route('logout') }}" style="margin:0;">

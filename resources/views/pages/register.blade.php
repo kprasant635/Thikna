@@ -318,13 +318,13 @@
       </div>
 
       {{-- Step Indicator --}}
-      <div class="sx-steps">
+      {{-- <div class="sx-steps">
         <div class="sx-step-line"></div>
-        <div class="sx-step active">
+        <div class="sx-step ">
           <div class="sx-step-num">1</div>
           <div class="sx-step-label">Registration</div>
         </div>
-        <div class="sx-step">
+        <div class="sx-step active">
           <div class="sx-step-num">2</div>
           <div class="sx-step-label">Verification</div>
         </div>
@@ -332,7 +332,7 @@
           <div class="sx-step-num">3</div>
           <div class="sx-step-label">Complete</div>
         </div>
-      </div>
+      </div> --}}
 
       {{-- General Error Banner --}}
       @if ($errors->any())
@@ -402,7 +402,7 @@
         </div>
 
         {{-- Referral Code --}}
-        <div class="field">
+        <div class="field" style="display: none;">
           <label for="referral-input">Referral Code <span class="optional">(optional)</span></label>
           <input type="text" id="referral-input" name="referral_code" value="{{ old('referral_code', request('ref')) }}" placeholder="e.g. SKP12345" style="text-transform: uppercase;">
           @error('referral_code')

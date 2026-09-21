@@ -124,7 +124,20 @@
 
                         @foreach ($recentJoinings as $joining)
                             <div class="sx-joining-item">
-                                <div class="sx-joining-avatar">{{ $joining['avatar'] }}</div>
+                                <div class="sx-joining-avatar">
+                                    @if (!empty($joining['avatar']))
+                                        <img src="{{ asset('storage/' . $joining['avatar']) }}" alt="{{ $joining['name'] }}"
+                                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+
+                                        <div class="sx-avatar-placeholder" style="display:none;">
+                                            {{ strtoupper(substr($joining['name'], 0, 1)) }}
+                                        </div>
+                                    @else
+                                        <div class="sx-avatar-placeholder">
+                                            {{ strtoupper(substr($joining['name'], 0, 1)) }}
+                                        </div>
+                                    @endif
+                                </div>
                                 <div class="sx-joining-info">
                                     <div class="sx-joining-name">{{ $joining['name'] }}</div>
                                     <div class="sx-joining-id">ID: {{ $joining['id'] }}</div>
