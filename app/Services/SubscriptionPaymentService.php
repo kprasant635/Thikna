@@ -10,10 +10,57 @@ use Illuminate\Support\Str;
 
 class SubscriptionPaymentService
 {
+    public const COURSE_MRP = 1000.00;
+    public const DISCOUNT = 800.00;
+    public const PLATFORM_FEE = 8.00;
+    public const GST_RATE = 18.00;
+    public const GATEWAY_CHARGE_RATE = 3.00;
+
     /**
      * Fixed subscription fee in INR.
      */
     public const SUBSCRIPTION_AMOUNT = 200;
+
+    /**
+     * Calculate dynamic pricing breakdown.
+     */
+    public static function getPricingBreakdown(): array
+    {
+        $courseMrp = (float) (config('subscription.course_mrp') ?? self::COURSE_MRP);
+        $discount = (float) (config('subscription.discount') ?? self::DISCOUNT);
+        $discountedCourseFee = max(0.00, $courseMrp - $discount);
+        $platformFee = (float) (config('subscription.platform_fee') ?? self::PLATFORM_FEE);
+        $gstRate = (float) (config('subscription.gst_rate') ?? self::GST_RATE);
+        $gatewayRate = (float) (config('subscription.gateway_charge_rate') ?? self::GATEWAY_CHARGE_RATE);
+
+        $gstAmount = round(($discountedCourseFee * $gstRate) / 100, 2);
+        $subtotalBeforeGateway = $discountedCourseFee + $platformFee + $gstAmount;
+        $gatewayCharge = round(($subtotalBeforeGateway * $gatewayRate) / 100, 2);
+        $totalPayable = round($subtotalBeforeGateway + $gatewayCharge, 2);
+
+        return [
+            'course_mrp' => $courseMrp,
+            'discount' => $discount,
+            'discounted_course_fee' => $discountedCourseFee,
+            'platform_fee' => $platformFee,
+            'gst_rate' => $gstRate,
+            'gst_amount' => $gstAmount,
+            'gateway_rate' => $gatewayRate,
+            'gateway_charge' => $gatewayCharge,
+            'total_payable' => $totalPayable,
+            'formatted' => [
+                'course_mrp' => '₹' . number_format($courseMrp, 2),
+                'discount' => '-₹' . number_format($discount, 2),
+                'discounted_course_fee' => '₹' . number_format($discountedCourseFee, 2),
+                'platform_fee' => '₹' . number_format($platformFee, 2),
+                'gst_rate' => number_format($gstRate, 0) . '%',
+                'gst_amount' => '₹' . number_format($gstAmount, 2),
+                'gateway_rate' => number_format($gatewayRate, 0) . '%',
+                'gateway_charge' => '₹' . number_format($gatewayCharge, 2),
+                'total_payable' => '₹' . number_format($totalPayable, 2),
+            ],
+        ];
+    }
 
     /**
      * Create or retrieve a pending payment record for a subscription.

@@ -28,8 +28,8 @@ class BusinessController extends Controller
             'phone' => '+913615550192',
             'phone_display' => '(361) 555-0192',
             'whatsapp_url' => 'https://wa.me/913615550192',
-            'directions_url' => 'https://maps.google.com/?q=Apex+Tech+Mobile+Hub+Guwahati',
-            'address' => '2nd Floor, Fancy Bazar, Downtown Guwahati',
+            'directions_url' => 'https://maps.google.com/?q=Apex+Tech+Mobile+Hub+Bhubaneswar',
+            'address' => '2nd Floor, Fancy Bazar, Downtown Bhubaneswar',
             'badges' => [
                 ['label' => '✓ Verified Gold Merchant'],
                 ['label' => '12 Years in Business'],

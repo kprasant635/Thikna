@@ -1,5 +1,5 @@
 /* ===========================================================
-   Thikana — Dashboard Stylesheet
+   SkopX — Dashboard Stylesheet
    =========================================================== */
 
 /* ---------- Dashboard Body ---------- */
@@ -19,6 +19,7 @@
   border-bottom: 1px solid var(--line);
   height: 60px;
 }
+
 .dash-header-inner {
   display: flex;
   align-items: center;
@@ -28,12 +29,14 @@
   padding: 0 24px;
   height: 100%;
 }
+
 .dash-header-left {
   display: flex;
   align-items: center;
   gap: 14px;
   flex-shrink: 0;
 }
+
 .sidebar-toggle {
   width: 36px;
   height: 36px;
@@ -47,14 +50,17 @@
   cursor: pointer;
   transition: border-color .15s ease, background .15s ease;
 }
+
 .sidebar-toggle:hover {
   border-color: var(--green-bright);
   background: var(--green-tint);
 }
+
 .dash-header-center {
   flex: 1;
   max-width: 480px;
 }
+
 .dash-search {
   display: flex;
   align-items: center;
@@ -65,10 +71,12 @@
   height: 38px;
   gap: 8px;
 }
+
 .dash-search-icon {
   font-size: 14px;
   flex-shrink: 0;
 }
+
 .dash-search input {
   flex: 1;
   border: none;
@@ -78,15 +86,18 @@
   font-family: 'Inter', sans-serif;
   color: var(--ink);
 }
+
 .dash-search input::placeholder {
   color: #8FA090;
 }
+
 .dash-header-right {
   display: flex;
   align-items: center;
   gap: 14px;
   flex-shrink: 0;
 }
+
 .dash-header-link {
   width: 36px;
   height: 36px;
@@ -99,10 +110,12 @@
   justify-content: center;
   transition: border-color .15s ease, color .15s ease;
 }
+
 .dash-header-link:hover {
   border-color: var(--green-bright);
   color: var(--green-deep);
 }
+
 .dash-user-pill {
   display: flex;
   align-items: center;
@@ -112,6 +125,7 @@
   border-radius: 999px;
   border: 1px solid var(--line);
 }
+
 .dash-user-name {
   font-size: 13px;
   font-weight: 600;
@@ -140,18 +154,22 @@
   overflow-y: auto;
   transition: transform .25s ease;
 }
+
 .sidebar-overlay {
   display: none;
 }
+
 .sidebar-nav {
   display: flex;
   flex-direction: column;
   padding: 12px 10px;
   min-height: calc(100vh - 60px - 24px);
 }
+
 .sidebar-section {
   margin-bottom: 8px;
 }
+
 .sidebar-section-label {
   font-size: 11px;
   font-weight: 700;
@@ -160,6 +178,7 @@
   letter-spacing: 0.06em;
   padding: 8px 14px 6px;
 }
+
 .sidebar-link {
   display: flex;
   align-items: center;
@@ -178,15 +197,18 @@
   font-family: 'Inter', sans-serif;
   cursor: pointer;
 }
+
 .sidebar-link:hover {
   background: var(--green-tint);
   color: var(--green-deep);
 }
+
 .sidebar-link.active {
   background: var(--green-deep);
   color: #fff;
   font-weight: 700;
 }
+
 .sidebar-icon {
   display: flex;
   align-items: center;
@@ -195,14 +217,17 @@
   width: 24px;
   height: 24px;
 }
+
 .sidebar-bottom-section {
   margin-top: auto;
   border-top: 1px solid var(--line);
   padding-top: 8px;
 }
+
 .sidebar-logout-btn {
   color: #C53030;
 }
+
 .sidebar-logout-btn:hover {
   background: #FFF5F5;
   color: #C53030;
@@ -225,36 +250,50 @@
   margin-bottom: 24px;
   animation: bannerSlideIn .35s ease;
 }
+
 @keyframes bannerSlideIn {
-  from { opacity: 0; transform: translateY(-12px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 .dash-welcome-banner-content {
   display: flex;
   align-items: flex-start;
   gap: 14px;
   padding: 18px 22px;
 }
+
 .dash-welcome-banner-icon {
   font-size: 28px;
   flex-shrink: 0;
   line-height: 1;
 }
+
 .dash-welcome-banner-text {
   flex: 1;
 }
+
 .dash-welcome-banner-text strong {
   font-size: 16px;
   color: var(--green-deep);
   display: block;
   margin-bottom: 4px;
 }
+
 .dash-welcome-banner-text p {
   font-size: 13.5px;
   color: var(--ink-soft);
   margin: 0;
   line-height: 1.5;
 }
+
 .dash-welcome-dismiss {
   background: none;
   border: none;
@@ -266,6 +305,7 @@
   flex-shrink: 0;
   transition: color .12s ease;
 }
+
 .dash-welcome-dismiss:hover {
   color: var(--ink);
 }
@@ -279,12 +319,14 @@
   gap: 16px;
   flex-wrap: wrap;
 }
+
 .dash-welcome-heading {
   font-size: 26px;
   font-family: 'Fraunces', serif;
   color: var(--green-deep);
   font-weight: 500;
 }
+
 .dash-welcome-sub {
   font-size: 14px;
   color: var(--ink-soft);
@@ -298,6 +340,7 @@
   gap: 16px;
   margin-bottom: 28px;
 }
+
 .dash-stat-card {
   background: var(--card);
   border: 1px solid var(--line);
@@ -308,10 +351,12 @@
   gap: 14px;
   transition: box-shadow .15s ease, transform .15s ease;
 }
+
 .dash-stat-card:hover {
   box-shadow: 0 8px 24px rgba(15, 94, 46, 0.08);
   transform: translateY(-1px);
 }
+
 .dash-stat-icon {
   width: 44px;
   height: 44px;
@@ -321,10 +366,12 @@
   justify-content: center;
   flex-shrink: 0;
 }
+
 .dash-stat-info {
   flex: 1;
   min-width: 0;
 }
+
 .dash-stat-label {
   font-size: 12px;
   color: var(--ink-soft);
@@ -333,11 +380,13 @@
   letter-spacing: 0.04em;
   margin-bottom: 4px;
 }
+
 .dash-stat-value {
   font-size: 20px;
   font-weight: 800;
   color: var(--ink);
 }
+
 .dash-referral-code {
   font-family: monospace;
   font-size: 15px;
@@ -359,13 +408,16 @@
   overflow: hidden;
   transition: box-shadow .15s ease;
 }
+
 .dash-card:hover {
   box-shadow: 0 8px 24px rgba(15, 94, 46, 0.06);
 }
+
 .dash-card-header {
   padding: 16px 22px;
   border-bottom: 1px solid var(--line);
 }
+
 .dash-card-header h3 {
   font-size: 15px;
   font-family: 'Inter', sans-serif;
@@ -373,6 +425,7 @@
   color: var(--ink);
   margin: 0;
 }
+
 .dash-card-body {
   padding: 22px;
 }
@@ -385,12 +438,14 @@
   overflow: hidden;
   margin-bottom: 8px;
 }
+
 .dash-progress-fill {
   height: 100%;
   background: linear-gradient(90deg, var(--green-bright), var(--green-deep));
   border-radius: 999px;
   transition: width .4s ease;
 }
+
 .dash-progress-label {
   font-size: 12.5px;
   font-weight: 700;
@@ -404,6 +459,7 @@
   flex-direction: column;
   gap: 8px;
 }
+
 .dash-check-item {
   display: flex;
   align-items: center;
@@ -411,14 +467,17 @@
   font-size: 13px;
   color: var(--ink-soft);
 }
+
 .dash-check-item.done {
   color: var(--green-deep);
 }
+
 .dash-check-icon {
   font-size: 14px;
   width: 20px;
   text-align: center;
 }
+
 .dash-check-item.done .dash-check-icon {
   color: var(--green-bright);
   font-weight: 700;
@@ -429,10 +488,12 @@
   text-align: center;
   padding: 24px 16px;
 }
+
 .dash-empty-icon {
   font-size: 40px;
   margin-bottom: 10px;
 }
+
 .dash-empty-state p {
   color: var(--ink-soft);
   font-size: 13.5px;
@@ -445,6 +506,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 12px;
 }
+
 .dash-action-tile {
   display: flex;
   flex-direction: column;
@@ -462,11 +524,13 @@
   text-decoration: none;
   text-align: center;
 }
+
 .dash-action-tile:hover {
   border-color: var(--green-bright);
   background: var(--green-tint-2);
   transform: translateY(-2px);
 }
+
 .dash-action-icon {
   font-size: 24px;
 }
@@ -477,11 +541,13 @@
   grid-template-columns: 1fr 1fr;
   gap: 18px;
 }
+
 .dash-info-item {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
+
 .dash-info-label {
   font-size: 11.5px;
   font-weight: 700;
@@ -489,6 +555,7 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+
 .dash-info-value {
   font-size: 14px;
   font-weight: 600;
@@ -503,6 +570,7 @@
   .dash-stats-row {
     grid-template-columns: repeat(2, 1fr);
   }
+
   .dash-content-grid {
     grid-template-columns: 1fr;
   }
@@ -513,9 +581,11 @@
   .dash-sidebar {
     transform: translateX(-100%);
   }
+
   .sidebar-open .dash-sidebar {
     transform: translateX(0);
   }
+
   .sidebar-open .sidebar-overlay {
     display: block;
     position: fixed;
@@ -526,19 +596,24 @@
     background: rgba(0, 0, 0, 0.3);
     z-index: 85;
   }
+
   .dash-main {
     margin-left: 0;
     padding: 20px 16px 60px;
   }
+
   .dash-stats-row {
     grid-template-columns: 1fr 1fr;
   }
+
   .dash-header-center {
     display: none;
   }
+
   .dash-user-name {
     display: none;
   }
+
   .dash-welcome-heading {
     font-size: 22px;
   }
@@ -548,9 +623,11 @@
   .dash-stats-row {
     grid-template-columns: 1fr;
   }
+
   .dash-quick-actions {
     grid-template-columns: 1fr;
   }
+
   .dash-info-grid {
     grid-template-columns: 1fr;
   }

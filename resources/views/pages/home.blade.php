@@ -1,147 +1,266 @@
 @extends('layouts.app')
 
-@section('title', 'Thikana — Find shops, rentals & products near you')
+@section('title', 'SKOP-X — Skill Today, Better Tomorrow')
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/skopx.css') }}">
+@endpush
 
 @section('content')
+    <div class="skopx-page">
 
-<div class="wrap hero">
-  <div class="eyebrow-pill">📍 Kamrup District #1 Local Directory</div>
-  <h1>Find what you need in <span class="accent">{{ $city ?? 'Guwahati' }}</span> — shops, rentals, products &amp; services</h1>
-  <p>Connect directly with verified local shops, homeowners and sellers — no middlemen, no listing fees.</p>
+        {{-- ====== 1. HERO BANNER ====== --}}
+        <section class="sx-hero">
+            <div class="sx-container">
+                <div class="sx-hero-inner">
+                    {{-- Left: Headlines --}}
+                    <div class="sx-hero-text">
+                        <h1>Skill Today<br>Better Tomorrow</h1>
+                        <div class="sx-hero-tagline">Learn | Grow | Earn | Together</div>
 
-  <div class="trust-row">
-    <div class="trust-item"><div class="trust-icon">☎️</div><div><span class="num">100%</span>Verified phones</div></div>
-    <div class="trust-item"><div class="trust-icon">💰</div><div><span class="num">Zero</span>Commission</div></div>
-    <div class="trust-item"><div class="trust-icon">⭐</div><div><span class="num">{{ number_format($reviewCount ?? 18000) }}+</span>Reviews</div></div>
-    <div class="trust-item"><div class="trust-icon">⏱️</div><div><span class="num">&lt; 15 min</span>Response time</div></div>
-  </div>
-</div>
+                        <div class="sx-hero-features">
+                            <div class="sx-hero-feature">
+                                <div class="sx-hero-feature-icon">📚</div>
+                                <span>Online Courses</span>
+                            </div>
+                            <div class="sx-hero-feature">
+                                <div class="sx-hero-feature-icon">👥</div>
+                                <span>Community Support</span>
+                            </div>
+                            <div class="sx-hero-feature">
+                                <div class="sx-hero-feature-icon">💰</div>
+                                <span>Income Opportunity</span>
+                            </div>
+                            <div class="sx-hero-feature">
+                                <div class="sx-hero-feature-icon">⭐</div>
+                                <span>Be an Achiever</span>
+                            </div>
+                        </div>
 
-<div class="wrap section">
-  <div class="section-head">
-    <div>
-      <h2>Explore our 3 marketplaces</h2>
-      <div class="section-sub">Active inventory updated throughout the day</div>
+                        <a href="{{ route('register') }}" class="sx-btn-yellow">Join Now →</a>
+                    </div>
+
+                    {{-- Center: Hero Image --}}
+                    <div class="sx-hero-img">
+                        <img src="{{ asset('images/hero-female-learner.jpg') }}" alt="SKOP-X Learner" loading="eager">
+                    </div>
+
+                    {{-- Right: Handwritten Quotes --}}
+                    <div class="sx-hero-right">
+                        <div class="sx-handwritten-mission">"Your<br>Success<br>Our Mission"</div>
+                        <div class="sx-hero-quote">
+                            "Learn<br>Upgrade<br>Earn<br>Be Independent"
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {{-- ====== 2. FEATURE CATEGORY STRIP ====== --}}
+        <section class="sx-categories">
+            <div class="sx-container">
+                <div class="sx-categories-inner">
+                    @foreach ($categories as $cat)
+                        <a class="sx-category-item" href="#">
+                            <div class="sx-category-icon" style="background: {{ $cat['color'] }}15;">
+                                <span>{{ $cat['icon'] }}</span>
+                            </div>
+                            <div class="sx-category-label">{{ $cat['title'] }}</div>
+                        </a>
+                    @endforeach
+
+                    <div class="sx-category-cta">
+                        <p><strong>Thousands are learning.</strong><br>Now it's your turn!</p>
+                        <a href="{{ route('register') }}" class="sx-btn-blue">Join SKOP-X Today →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {{-- ====== 3. MAIN CONTENT ====== --}}
+        <section class="sx-main-content">
+            <div class="sx-container">
+                <div class="sx-main-grid">
+
+                    {{-- CENTER: Promo Banner + Info Cards --}}
+                    <div>
+                        <div class="sx-promo-banner">
+                            <div class="sx-promo-text">
+                                <h2>Learn<br>From Anywhere</h2>
+                                <p>Video Courses | Practical Training | Real Opportunities</p>
+                                <a href="#" class="sx-btn-orange">Explore Courses →</a>
+                            </div>
+                            <div class="sx-promo-img">
+                                <img src="{{ asset('images/promo-male-learner.jpg') }}" alt="Learn from anywhere">
+                                <div class="sx-play-btn"></div>
+                            </div>
+                        </div>
+
+                        <div class="sx-info-cards">
+                            <div class="sx-info-card">
+                                <div class="sx-info-card-icon">💡</div>
+                                <h4>Why Choose SKOP-X?</h4>
+                                <p>Practical learning for real life success.</p>
+                            </div>
+                            <div class="sx-info-card">
+                                <div class="sx-info-card-icon">⚙️</div>
+                                <h4>How It Works?</h4>
+                                <p>Simple steps to start your journey.</p>
+                            </div>
+                            <div class="sx-info-card">
+                                <div class="sx-info-card-icon">💰</div>
+                                <h4>Income Opportunity</h4>
+                                <p>Learn, Share & Earn together.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- RIGHT: Recent Joinings --}}
+                    <div class="sx-joinings-card">
+                        <div class="sx-card-header">
+                            <h3>Recent New Joinings</h3>
+                            <a class="sx-view-all" href="#">View All</a>
+                        </div>
+
+                        @foreach ($recentJoinings as $joining)
+                            <div class="sx-joining-item">
+                                <div class="sx-joining-avatar">{{ $joining['avatar'] }}</div>
+                                <div class="sx-joining-info">
+                                    <div class="sx-joining-name">{{ $joining['name'] }}</div>
+                                    <div class="sx-joining-id">ID: {{ $joining['id'] }}</div>
+                                    <div class="sx-joining-city">{{ $joining['city'] }}</div>
+                                </div>
+                                <div class="sx-joining-date">{{ $joining['date'] }}</div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        {{-- ====== 4. FEATURED VIDEOS ====== --}}
+        <section class="sx-videos-section">
+            <div class="sx-container">
+                <div class="sx-videos-header">
+                    <h2>Featured Videos – Learn, Grow, Earn</h2>
+                    <a class="sx-view-all" href="#">View All Videos</a>
+                </div>
+
+                <div class="sx-videos-row">
+                    @foreach ($featuredVideos as $video)
+                        <div class="sx-video-card">
+                            <div class="sx-video-thumb">
+                                <div class="sx-video-play"></div>
+                                <div class="sx-video-duration">{{ $video['duration'] }}</div>
+                            </div>
+                            <div class="sx-video-body">
+                                <h4>{{ $video['title'] }}</h4>
+                                <p>{{ $video['desc'] }}</p>
+                            </div>
+                        </div>
+                    @endforeach
+
+                    {{-- Small promo card --}}
+                    <div class="sx-small-promo">
+                        <h4>Small Learning<br>Big Opportunities</h4>
+                        <img src="{{ asset('images/growth-plant.jpg') }}" alt="Growth">
+                        <a href="{{ route('register') }}" class="sx-btn-blue">Start Learning →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {{-- ====== 5. THREE BOTTOM PANELS ====== --}}
+        <section class="sx-bottom-panels">
+            <div class="sx-container">
+                <div class="sx-panels-grid">
+
+                    {{-- Top Achievers --}}
+                    <div class="sx-panel">
+                        <div class="sx-card-header">
+                            <h3>Top Achievers</h3>
+                            <a class="sx-view-all" href="#">View All</a>
+                        </div>
+
+                        @foreach ($topAchievers as $i => $achiever)
+                            <div class="sx-achiever-item">
+                                <div class="sx-achiever-rank">{{ $i + 1 }}</div>
+                                <div class="sx-achiever-avatar" style="background: {{ $achiever['color'] }};">
+                                    {{ $achiever['avatar'] }}</div>
+                                <div class="sx-achiever-info">
+                                    <div class="sx-achiever-name">{{ $achiever['name'] }}</div>
+                                    <div class="sx-achiever-level" style="color: {{ $achiever['color'] }};">
+                                        {{ $achiever['level'] }}</div>
+                                </div>
+                                <div class="sx-achiever-amount">
+                                    <span class="amt">₹ {{ $achiever['amount'] }}</span>
+                                    <span class="period">This Month</span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    {{-- Birthday Wishes --}}
+                    <div class="sx-panel">
+                        <div class="sx-card-header">
+                            <h3>Birthday Wishes</h3>
+                            <a class="sx-view-all" href="#">View All</a>
+                        </div>
+
+                        @foreach ($birthdays as $bday)
+                            <div class="sx-birthday-item">
+                                <div class="sx-birthday-avatar">🎂</div>
+                                <div class="sx-birthday-info">
+                                    <div class="sx-birthday-name">{{ $bday['name'] }}</div>
+                                    <div class="sx-birthday-msg">{{ $bday['message'] }}</div>
+                                </div>
+                                <div class="sx-birthday-date">{{ $bday['date'] }}</div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    {{-- Marriage Anniversary --}}
+                    <div class="sx-panel">
+                        <div class="sx-card-header">
+                            <h3>Marriage Anniversary</h3>
+                            <a class="sx-view-all" href="#">View All</a>
+                        </div>
+
+                        @foreach ($anniversaries as $anniv)
+                            <div class="sx-anniv-item">
+                                <div class="sx-anniv-avatars">
+                                    <div class="sx-anniv-avatar" style="background: var(--sx-blue);">
+                                        {{ $anniv['avatars'][0] }}</div>
+                                    <div class="sx-anniv-avatar" style="background: var(--sx-pink);">
+                                        {{ $anniv['avatars'][1] }}</div>
+                                </div>
+                                <div class="sx-anniv-info">
+                                    <div class="sx-anniv-names">{{ $anniv['names'] }}</div>
+                                    <div class="sx-anniv-msg">{{ $anniv['message'] }}</div>
+                                </div>
+                                <div class="sx-anniv-date">{{ $anniv['date'] }}</div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
     </div>
-  </div>
-  <div class="sector-grid">
-    @foreach($sectors as $sector)
-    <a class="sector-card" href="{{ $sector['url'] }}">
-      <div class="sector-icon">{{ $sector['icon'] }}</div>
-      <div class="count">{{ $sector['count'] }}</div>
-      <h3>{{ $sector['title'] }}</h3>
-      <p>{{ $sector['description'] }}</p>
-      <div class="go">{{ $sector['cta'] }} →</div>
-    </a>
-    @endforeach
-  </div>
-</div>
 
-<div class="wrap section">
-  <div class="section-head">
-    <div>
-      <h2>Featured merchants near you</h2>
-      <div class="section-sub">Hand-inspected credentials · sorted by response speed</div>
-    </div>
-    <a class="see-all" href="{{ route('shops.index') }}">See all shops →</a>
-  </div>
-
-  @foreach($featuredMerchants as $merchant)
-  <a class="merchant-card" href="{{ route('business.show', ['business' => $merchant['slug']]) }}">
-    <div class="merchant-thumb"><span class="tag">{{ $merchant['status'] }}</span>{{ $merchant['icon'] }}</div>
-    <div class="merchant-body">
-      <h3>{{ $merchant['name'] }}</h3>
-      <div class="merchant-meta">
-        <span class="rating"><span class="star">★</span> {{ $merchant['rating'] }}</span>
-        <span>{{ $merchant['reviews'] }} verified reviews</span>
-        <span>· {{ $merchant['location'] }}</span>
-      </div>
-      <div class="merchant-desc">{{ $merchant['description'] }}</div>
-      <div class="merchant-tags">
-        @foreach($merchant['tags'] as $tag)<span>{{ $tag }}</span>@endforeach
-      </div>
-    </div>
-    <div class="merchant-actions">
-      <div class="btn btn-primary">Call now</div>
-      <div class="btn btn-gold">Get best quote</div>
-    </div>
-  </a>
-  @endforeach
-</div>
-
-<div class="wrap section">
-  <div class="section-head">
-    <div>
-      <h2>Homes for rent</h2>
-      <div class="section-sub">1BHK to 3BHK, verified owners, zero-brokerage listings marked</div>
-    </div>
-    <a class="see-all" href="{{ route('rentals.index') }}">See all rentals →</a>
-  </div>
-  <div class="card-row">
-    @foreach($featuredRentals as $rental)
-    <a class="card" href="{{ route('rentals.index') }}">
-      <div class="card-img">{{ $rental['icon'] }}</div>
-      <div class="card-body">
-        <span class="card-tag">{{ $rental['tag'] }}</span>
-        <h3>{{ $rental['title'] }}</h3>
-        <div class="loc">{{ $rental['location'] }}</div>
-        <div class="card-meta"><div class="price">₹{{ number_format($rental['price']) }}/mo</div><div class="btn btn-tint">View</div></div>
-      </div>
-    </a>
-    @endforeach
-  </div>
-</div>
-
-<div class="wrap section">
-  <div class="section-head">
-    <div>
-      <h2>Products from local sellers</h2>
-      <div class="section-sub">Buy directly from shops and individuals near you</div>
-    </div>
-    <a class="see-all" href="{{ route('business.show', ['business' => 'apex-tech-mobile-hub']) }}">See all products →</a>
-  </div>
-  <div class="card-row">
-    @foreach($featuredProducts as $product)
-    <a class="card" href="{{ route('business.show', ['business' => $product['seller_slug']]) }}">
-      <div class="card-img">{{ $product['icon'] }}</div>
-      <div class="card-body">
-        <span class="card-tag">{{ $product['category'] }}</span>
-        <h3>{{ $product['name'] }}</h3>
-        <div class="loc">Sold by {{ $product['seller'] }}</div>
-        <div class="card-meta"><div class="price">₹{{ number_format($product['price']) }}</div><div class="btn btn-tint">Buy now</div></div>
-      </div>
-    </a>
-    @endforeach
-  </div>
-</div>
-
-<div class="wrap section">
-  <div class="deals-band">
-    <h2 style="font-size:20px;">Exclusive deals of the day</h2>
-    <div class="deal-row">
-      @foreach($deals as $deal)
-      <div class="deal-card">
-        <div class="off">{{ $deal['off'] }}</div>
-        <h4>{{ $deal['merchant'] }}</h4>
-        <p>{{ $deal['description'] }}</p>
-        <span class="deal-code">{{ $deal['code'] }}</span>
-      </div>
-      @endforeach
-    </div>
-  </div>
-</div>
-
-<div class="wrap section">
-  <div class="cta-band">
-    <div>
-      <h2>Are you a merchant or contractor in {{ $city ?? 'Guwahati' }}?</h2>
-      <p>List your business free in 2 minutes and receive direct customer enquiries on your verified phone.</p>
-    </div>
-    <div class="actions">
-      <a class="btn btn-outline" href="{{ route('business.create') }}">View merchant plans</a>
-      <a class="btn btn-gold" href="{{ route('business.create') }}">Claim your free profile →</a>
-    </div>
-  </div>
-</div>
-
+    @push('scripts')
+        <script>
+            function refreshCaptcha() {
+                const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+                let captcha = '';
+                for (let i = 0; i < 4; i++) {
+                    if (i > 0) captcha += ' ';
+                    captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                document.getElementById('sx-captcha-text').textContent = captcha;
+            }
+        </script>
+    @endpush
 @endsection

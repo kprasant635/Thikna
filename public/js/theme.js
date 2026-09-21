@@ -1,22 +1,22 @@
 /**
- * Thikana Theme & Appearance Customizer
+ * SkopX Theme & Appearance Customizer
  * Supports: Light / Dark / Device modes, 10+ Curated Palettes, Custom HEX Color Picker & Eyedropper API.
  */
 
 (function () {
-  const STORAGE_KEY = 'thikana_theme_config';
+  const STORAGE_KEY = 'SkopX_theme_config';
 
   const PALETTES = {
     forest: {
-      name: 'Forest Emerald',
-      deep: '#0F5E2E',
-      mid: '#4A8333',
-      bright: '#088F36',
-      tint: '#EEF5EA',
-      tint2: '#E3F0DC',
-      gold: '#C99A3C',
-      goldTint: '#FBF2DF',
-      swatchColors: ['#0F5E2E', '#4A8333', '#EEF5EA', '#E3F0DC']
+      name: 'SKOP-X Royal',
+      deep: '#1a3a8f',
+      mid: '#2563eb',
+      bright: '#3b82f6',
+      tint: '#eff6ff',
+      tint2: '#dbeafe',
+      gold: '#ff9900',
+      goldTint: '#fff7ed',
+      swatchColors: ['#1a3a8f', '#2563eb', '#eff6ff', '#dbeafe']
     },
     blue: {
       name: 'Ocean Blue',
@@ -187,7 +187,7 @@
     const bright = hslToHex(hsl.h, Math.min(100, hsl.s + 15), brightL);
     const tint = hslToHex(hsl.h, Math.min(30, hsl.s), 96);
     const tint2 = hslToHex(hsl.h, Math.min(35, hsl.s), 91);
-    
+
     // Complementary gold/accent
     const compH = (hsl.h + 180) % 360;
     const gold = hslToHex(compH, 75, 52);
@@ -226,7 +226,7 @@
   function saveConfig(cfg) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(cfg));
-    } catch (e) {}
+    } catch (e) { }
   }
 
   let currentConfig = loadConfig();
@@ -253,7 +253,7 @@
     root.style.setProperty('--green-deep', pData.deep);
     root.style.setProperty('--green-mid', pData.mid);
     root.style.setProperty('--green-bright', pData.bright);
-    
+
     if (activeDark) {
       // In dark mode, tints are adjusted with translucent dark overlays
       root.style.setProperty('--green-tint', `rgba(${hexToRgbValues(pData.deep)}, 0.22)`);
@@ -335,7 +335,7 @@
   applyTheme();
 
   // Expose global methods
-  window.ThikanaTheme = {
+  window.SkopXTheme = {
     open: function () {
       const drawer = document.getElementById('themeCustomizerModal');
       const backdrop = document.getElementById('themeBackdrop');
@@ -388,7 +388,7 @@
     document.querySelectorAll('.thm-mode-btn').forEach(btn => {
       btn.addEventListener('click', function () {
         const mode = this.getAttribute('data-mode');
-        window.ThikanaTheme.setMode(mode);
+        window.SkopXTheme.setMode(mode);
       });
     });
 
@@ -396,7 +396,7 @@
     document.querySelectorAll('.thm-swatch[data-palette]').forEach(swatch => {
       swatch.addEventListener('click', function () {
         const pKey = this.getAttribute('data-palette');
-        window.ThikanaTheme.setPalette(pKey);
+        window.SkopXTheme.setPalette(pKey);
       });
     });
 
@@ -404,10 +404,10 @@
     const colorPicker = document.getElementById('thmColorPickerInput');
     if (colorPicker) {
       colorPicker.addEventListener('input', function (e) {
-        window.ThikanaTheme.setCustomColor(e.target.value);
+        window.SkopXTheme.setCustomColor(e.target.value);
       });
       colorPicker.addEventListener('change', function (e) {
-        window.ThikanaTheme.setCustomColor(e.target.value);
+        window.SkopXTheme.setCustomColor(e.target.value);
       });
     }
 
@@ -418,7 +418,7 @@
         let val = e.target.value.trim();
         if (!val.startsWith('#')) val = '#' + val;
         if (/^#[0-9a-fA-F]{6}$/.test(val)) {
-          window.ThikanaTheme.setCustomColor(val);
+          window.SkopXTheme.setCustomColor(val);
         }
       });
     }
@@ -432,7 +432,7 @@
             const eyeDropper = new window.EyeDropper();
             const result = await eyeDropper.open();
             if (result && result.sRGBHex) {
-              window.ThikanaTheme.setCustomColor(result.sRGBHex);
+              window.SkopXTheme.setCustomColor(result.sRGBHex);
             }
           } catch (e) {
             console.log('EyeDropper closed or not supported', e);
@@ -450,24 +450,24 @@
     const resetBtn = document.getElementById('thmResetBtn');
     if (resetBtn) {
       resetBtn.addEventListener('click', function () {
-        window.ThikanaTheme.reset();
+        window.SkopXTheme.reset();
       });
     }
 
     // Backdrop & Close buttons
     const backdrop = document.getElementById('themeBackdrop');
     if (backdrop) {
-      backdrop.addEventListener('click', window.ThikanaTheme.close);
+      backdrop.addEventListener('click', window.SkopXTheme.close);
     }
     document.querySelectorAll('.thm-close-btn').forEach(btn => {
-      btn.addEventListener('click', window.ThikanaTheme.close);
+      btn.addEventListener('click', window.SkopXTheme.close);
     });
 
     // Open triggers
     document.querySelectorAll('.thm-trigger-btn').forEach(btn => {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
-        window.ThikanaTheme.open();
+        window.SkopXTheme.open();
       });
     });
 

@@ -12,11 +12,11 @@ class RentalController extends Controller
     {
         return [
             [
-                'slug' => 'spacious-2bhk-domain-north-guwahati',
+                'slug' => 'spacious-2bhk-domain-north-Bhubaneswar',
                 'image' => 'images/rental-apartment-2bhk.jpg',
                 'icon' => '🏠', 'tag' => 'Verified property', 'tag_style' => '',
                 'title' => 'Spacious 2 BHK Modern Apartment with Balcony',
-                'location' => 'The Domain, North Guwahati (0.4 km to Tech Park)',
+                'location' => 'The Domain, North Bhubaneswar (0.4 km to Tech Park)',
                 'price' => 14000, 'deposit_label' => 'deposit: 1 month rent',
                 'facts' => ['2 Beds', '2 Baths', '1,180 sq ft', 'Ready to move'],
                 'tags' => ['Semi-furnished', 'Covered parking', 'Pet friendly'],
@@ -50,8 +50,8 @@ class RentalController extends Controller
     public function index(Request $request): View
     {
         return view('pages.rentals', [
-            'city' => 'Guwahati',
-            'area' => $request->get('area', 'North Guwahati'),
+            'city' => 'Bhubaneswar',
+            'area' => $request->get('area', 'North Bhubaneswar'),
             'updatedAgo' => '8 min',
             'avgRent' => 15400,
             'avgRentTrend' => '−1.2% vs last year',

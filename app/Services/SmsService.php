@@ -25,7 +25,7 @@ class SmsService
      */
     public function sendOtp(string $phone, string $otp): bool
     {
-        $message = "Your Thikana verification code is: {$otp}. Valid for 5 minutes. Do not share this code with anyone.";
+        $message = "Your SkopX verification code is: {$otp}. Valid for 5 minutes. Do not share this code with anyone.";
 
         return $this->send($phone, $message);
     }

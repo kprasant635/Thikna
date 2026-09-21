@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
     'email',
     'password',
     'address',
+    'profile_photo',
     'status',
     'learning_status',
     'referral_code',
@@ -117,6 +118,18 @@ class User extends Authenticatable
     public function referrals(): HasMany
     {
         return $this->hasMany(User::class, 'referred_by_id');
+    }
+
+    /**
+     * Get the full URL to the user's profile photo.
+     */
+    public function profilePhotoUrl(): ?string
+    {
+        if ($this->profile_photo) {
+            return asset('storage/' . $this->profile_photo);
+        }
+
+        return null;
     }
 
     /**

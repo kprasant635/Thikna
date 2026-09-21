@@ -177,7 +177,7 @@ class RegisterController extends Controller
             // Log the user in
             Auth::login($user);
 
-            return redirect()->route('subscription.show')->with('success', 'Your account has been created successfully!');
+            return redirect()->route('dashboard')->with('success', 'Your account has been created successfully!');
         } catch (\Throwable $e) {
             report($e);
 

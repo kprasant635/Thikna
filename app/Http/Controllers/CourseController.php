@@ -22,7 +22,7 @@ class CourseController extends Controller
     {
         $user = $request->user();
         $learningData = $this->learningService->getUserCourses($user);
-
+        
         return view('pages.courses.index', array_merge([
             'user' => $user,
         ], $learningData));

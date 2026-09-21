@@ -23,10 +23,7 @@ class LoginController extends Controller
     public function showLoginForm(): View|RedirectResponse
     {
         if (Auth::check()) {
-            $user = Auth::user();
-            return $user->isActive() 
-                ? redirect()->route('dashboard') 
-                : redirect()->route('subscription.show');
+            return redirect()->route('dashboard');
         }
 
         return view('pages.login');
@@ -60,20 +57,16 @@ class LoginController extends Controller
         // Log the user in
         Auth::login($user);
 
-        // Redirect based on user status
-        $redirectUrl = $user->isActive() ? route('dashboard') : route('subscription.show');
+        $redirectUrl = route('dashboard');
 
         if ($request->expectsJson()) {
             return response()->json([
                 'success' => true,
-                'message' => $user->isActive() ? 'Welcome back!' : 'Please complete your subscription to activate your account.',
+                'message' => 'Welcome back to SKOP-X!',
                 'redirect_url' => $redirectUrl,
             ]);
         }
 
-        return redirect()->to($redirectUrl)->with(
-            $user->isActive() ? 'success' : 'warning',
-            $user->isActive() ? 'Welcome back to Thikana!' : 'Please complete your subscription to activate your account.'
-        );
+        return redirect()->to($redirectUrl)->with('success', 'Welcome back to SKOP-X!');
     }
 }

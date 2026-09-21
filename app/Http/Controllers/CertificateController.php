@@ -14,7 +14,7 @@ class CertificateController extends Controller
     ) {}
 
     /**
-     * View user's official Thikana Certificate.
+     * View user's official SkopX Certificate.
      */
     public function show(Request $request): View|RedirectResponse
     {

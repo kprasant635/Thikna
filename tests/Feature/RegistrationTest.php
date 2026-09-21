@@ -19,8 +19,8 @@ class RegistrationTest extends TestCase
         $response = $this->get(route('register'));
 
         $response->assertStatus(200);
-        $response->assertSee('Create your account');
-        $response->assertSee('Referral code');
+        $response->assertSee('Create Your Account');
+        $response->assertSee('Referral Code');
     }
 
     public function test_send_otp_success_for_valid_10_digit_phone(): void
@@ -62,7 +62,7 @@ class RegistrationTest extends TestCase
             'name' => 'Existing User',
             'phone' => '9876543210',
             'email' => 'existing@example.com',
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $response = $this->postJson(route('register.otp.send'), [
@@ -213,7 +213,7 @@ class RegistrationTest extends TestCase
             'name' => 'Priya Das',
             'phone' => '9876543210',
             'referral_code' => 'INVALIDREF99',
-            'address' => 'Flat 402, Green Valley Apartments, Guwahati',
+            'address' => 'Flat 402, Green Valley Apartments, Bhubaneswar',
         ]);
 
         $response->assertSessionHasErrors(['referral_code']);
@@ -229,7 +229,7 @@ class RegistrationTest extends TestCase
             'name' => 'Referrer User',
             'phone' => '9111111111',
             'email' => 'ref@example.com',
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
             'referral_code' => 'THKREF100',
         ]);
 
@@ -252,10 +252,10 @@ class RegistrationTest extends TestCase
             'phone' => '9876543210',
             'email' => 'priya@example.com',
             'referral_code' => 'THKREF100',
-            'address' => 'Flat 402, Green Valley Apartments, Guwahati',
+            'address' => 'Flat 402, Green Valley Apartments, Bhubaneswar',
         ]);
 
-        $response->assertRedirect(route('subscription.show'));
+        $response->assertRedirect(route('dashboard'));
         $response->assertSessionHas('success');
 
         $this->assertDatabaseHas('users', [
@@ -291,10 +291,10 @@ class RegistrationTest extends TestCase
         $response = $this->post(route('register.submit'), [
             'name' => 'Amit Roy',
             'phone' => '9876543210',
-            'address' => 'Zoo Road, Guwahati',
+            'address' => 'Zoo Road, Bhubaneswar',
         ]);
 
-        $response->assertRedirect(route('subscription.show'));
+        $response->assertRedirect(route('dashboard'));
 
         $this->assertDatabaseHas('users', [
             'name' => 'Amit Roy',
@@ -330,7 +330,7 @@ class RegistrationTest extends TestCase
         $this->post(route('register.submit'), [
             'name' => 'User One',
             'phone' => '9876543210',
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         // 3. Attempting to use the same verified OTP again should be blocked

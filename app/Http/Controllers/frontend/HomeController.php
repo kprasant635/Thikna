@@ -9,82 +9,59 @@ class HomeController extends Controller
 {
     public function index(): View
     {
-        $sectors = [
-            [
-                'icon' => '🏪', 'count' => '2,400+ shops', 'title' => 'Local Shops & Services',
-                'description' => 'Grocery, electronics, tailoring and boutique retail across Guwahati.',
-                'cta' => 'Browse shops', 'url' => route('shops.index'),
-            ],
-            [
-                'icon' => '🏠', 'count' => '640+ listings', 'title' => 'Home Rentals & Realty',
-                'description' => 'Verified flats, studios and independent houses, no agent markup.',
-                'cta' => 'See properties', 'url' => route('rentals.index'),
-            ],
-            [
-                'icon' => '📦', 'count' => '3,100+ catalogs', 'title' => 'Products & B2B',
-                'description' => 'Direct manufacturers, wholesale stock and bulk supplies.',
-                'cta' => 'Source products', 'url' => route('business.show', ['business' => 'apex-tech-mobile-hub']),
-            ],
-            [
-                'icon' => '🔧', 'count' => '420+ experts', 'title' => 'Emergency & Repairs',
-                'description' => 'On-call plumbers, electricians and roadside mechanics.',
-                'cta' => 'Get urgent help', 'url' => route('shops.index'),
-            ],
+        $categories = [
+            ['icon' => '📊', 'title' => 'Digital Skills', 'color' => '#2563eb'],
+            ['icon' => '📈', 'title' => 'Business Growth', 'color' => '#dc2626'],
+            ['icon' => '💰', 'title' => 'Financial Freedom', 'color' => '#059669'],
+            ['icon' => '🏆', 'title' => 'Recognition', 'color' => '#d97706'],
+            ['icon' => '👥', 'title' => 'Community', 'color' => '#7c3aed'],
+            ['icon' => '🎧', 'title' => 'Support 24x7', 'color' => '#0891b2'],
         ];
 
-        $featuredMerchants = [
-            [
-                'slug' => 'apex-tech-mobile-hub', 'icon' => '📱', 'status' => 'Open now',
-                'image' => 'images/shop-mobile-hub.jpg',
-                'name' => 'Apex Tech & Mobile Hub', 'rating' => 4.9, 'reviews' => 342,
-                'location' => 'Downtown Guwahati, 1.2 km away',
-                'description' => 'Authorised repair provider and mobile accessories retailer — screen replacements, chargers, and bulk accessories.',
-                'tags' => ['Free diagnostics', 'OEM parts', '1-yr warranty'],
-            ],
-            [
-                'slug' => 'borah-plumbing-sanitation', 'icon' => '🚰', 'status' => 'Open now',
-                'image' => 'images/merchant-plumbing.jpg',
-                'name' => 'Borah Plumbing & Sanitation', 'rating' => 4.8, 'reviews' => 219,
-                'location' => 'Zoo Road, Guwahati',
-                'description' => 'Leak repair, tankless water heater installs and residential mainline clearance. 24 hours active.',
-                'tags' => ['Hydro-jetting', 'No night surcharge'],
-            ],
-            [
-                'slug' => 'assam-hardware-bulk-supplies', 'icon' => '🏗️', 'status' => 'Open now',
-                'image' => 'images/merchant-hardware.jpg',
-                'name' => 'Assam Hardware & Bulk Supplies', 'rating' => 4.9, 'reviews' => 198,
-                'location' => 'Fancy Bazar, Guwahati',
-                'description' => 'Wholesale distributor for electrical components, conduit, and bulk fasteners. Same-day pickup available.',
-                'tags' => ['B2B accounts', 'Commercial credit'],
-            ],
+        $recentJoinings = [
+            ['name' => 'Ramesh Kumar', 'id' => 'SK012345', 'city' => 'Bhubaneswar', 'date' => '15 Sep', 'avatar' => 'RK'],
+            ['name' => 'Priyanka Sahoo', 'id' => 'SK012344', 'city' => 'Cuttack', 'date' => '15 Sep', 'avatar' => 'PS'],
+            ['name' => 'Amit Patel', 'id' => 'SK012343', 'city' => 'Puri', 'date' => '14 Sep', 'avatar' => 'AP'],
+            ['name' => 'Sushmita Das', 'id' => 'SK012342', 'city' => 'Berhampur', 'date' => '14 Sep', 'avatar' => 'SD'],
+            ['name' => 'Manoj Behera', 'id' => 'SK012341', 'city' => 'Sambalpur', 'date' => '13 Sep', 'avatar' => 'MB'],
         ];
 
-        $featuredRentals = [
-            ['image' => 'images/home-rental-beltola.jpg',    'icon' => '🏠', 'tag' => '2 BHK · Zero brokerage', 'title' => 'Modern Apartment — Beltola',      'location' => 'Beltola, Guwahati · 950 sq ft',       'price' => 14000],
-            ['image' => 'images/home-rental-chandmari.jpg',  'icon' => '🏢', 'tag' => '1 BHK · Furnished',      'title' => 'Cosy Flat — Chandmari',          'location' => 'Chandmari, Guwahati · 560 sq ft',     'price' => 9500],
-            ['image' => 'images/home-rental-hengrabari.jpg', 'icon' => '🏡', 'tag' => '3 BHK · Independent',   'title' => 'House with Parking — Hengrabari', 'location' => 'Hengrabari, Guwahati · 1400 sq ft',   'price' => 22000],
+        $featuredVideos = [
+            ['title' => 'Why SKOP-X?', 'desc' => 'Know the opportunity', 'duration' => '2:45'],
+            ['title' => 'How to Start?', 'desc' => 'Step by step guide', 'duration' => '5:18'],
+            ['title' => 'Earning Plan Explained', 'desc' => 'Your income potential', 'duration' => '6:20'],
+            ['title' => 'Success Stories', 'desc' => 'Real people, real results', 'duration' => '4:10'],
         ];
 
-        $featuredProducts = [
-            ['image' => 'images/product-iphone-screen.jpg', 'icon' => '📱', 'category' => 'Mobile parts', 'name' => 'OEM OLED Screen — iPhone 14/15',  'seller' => 'Apex Tech & Mobile Hub',       'seller_slug' => 'apex-tech-mobile-hub', 'price' => 7400],
-            ['image' => 'images/product-bicycle.jpg',       'icon' => '🚲', 'category' => 'Sports',       'name' => 'Hero Sprint Bicycle',              'seller' => 'Nath Cycle Store · Six Mile',  'seller_slug' => 'nath-cycle-store',     'price' => 5600],
-            ['image' => 'images/product-study-table.jpg',   'icon' => '🛋️', 'category' => 'Furniture',    'name' => 'Wooden Study Table',               'seller' => 'Rahman Furniture · Uzan Bazar','seller_slug' => 'rahman-furniture',     'price' => 3200],
+        $topAchievers = [
+            ['name' => 'Anil Kumar', 'level' => 'Gold Achiever', 'amount' => '1,25,000', 'avatar' => 'AK', 'color' => '#f59e0b'],
+            ['name' => 'Sunita Mishra', 'level' => 'Silver Achiever', 'amount' => '95,000', 'avatar' => 'SM', 'color' => '#9ca3af'],
+            ['name' => 'Rohit Das', 'level' => 'Silver Achiever', 'amount' => '82,000', 'avatar' => 'RD', 'color' => '#9ca3af'],
+            ['name' => 'Meena Rath', 'level' => 'Bronze Achiever', 'amount' => '68,000', 'avatar' => 'MR', 'color' => '#b45309'],
+            ['name' => 'Prakash Sahu', 'level' => 'Bronze Achiever', 'amount' => '60,000', 'avatar' => 'PS', 'color' => '#b45309'],
         ];
 
-        $deals = [
-            ['off' => '25% OFF', 'merchant' => 'Assam Hardware Co.', 'description' => "Bulk fasteners and power tool rentals this week.", 'code' => 'HARDWARE25'],
-            ['off' => '₹500 OFF', 'merchant' => 'Hill Country Rentals', 'description' => "Discount on first month's rent for 12+ month leasing.", 'code' => 'MOVEIN500'],
-            ['off' => 'FREE CHECK', 'merchant' => 'Apex Tech & Mobile Hub', 'description' => 'Complimentary battery health and charging port check.', 'code' => 'DEVICECHECK'],
+        $birthdays = [
+            ['name' => 'Ankita Nayak', 'message' => 'Many happy returns!', 'date' => '15 Sep', 'avatar' => 'AN'],
+            ['name' => 'Sambit Kumar', 'message' => 'Wishing you a great year!', 'date' => '15 Sep', 'avatar' => 'SK'],
+            ['name' => 'Rupa Das', 'message' => 'Stay happy always!', 'date' => '16 Sep', 'avatar' => 'RD'],
+            ['name' => 'Vikash Mohanty', 'message' => 'Have a wonderful day!', 'date' => '16 Sep', 'avatar' => 'VM'],
+        ];
+
+        $anniversaries = [
+            ['names' => 'Rakesh & Priyanka', 'message' => 'Happy Anniversary!', 'date' => '15 Sep', 'avatars' => ['RP', 'PR']],
+            ['names' => 'Suresh & Mamata', 'message' => 'Stay blessed together!', 'date' => '17 Sep', 'avatars' => ['SM', 'MA']],
+            ['names' => 'Amit & Neha', 'message' => 'Wishing you endless love!', 'date' => '17 Sep', 'avatars' => ['AN', 'NE']],
+            ['names' => 'Manoj & Pooja', 'message' => 'Happy Anniversary!', 'date' => '18 Sep', 'avatars' => ['MP', 'PO']],
         ];
 
         return view('pages.home', [
-            'city' => 'Guwahati',
-            'reviewCount' => 18000,
-            'sectors' => $sectors,
-            'featuredMerchants' => $featuredMerchants,
-            'featuredRentals' => $featuredRentals,
-            'featuredProducts' => $featuredProducts,
-            'deals' => $deals,
+            'categories' => $categories,
+            'recentJoinings' => $recentJoinings,
+            'featuredVideos' => $featuredVideos,
+            'topAchievers' => $topAchievers,
+            'birthdays' => $birthdays,
+            'anniversaries' => $anniversaries,
         ]);
     }
 }

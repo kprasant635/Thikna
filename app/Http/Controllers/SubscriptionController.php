@@ -41,13 +41,16 @@ class SubscriptionController extends Controller
         $selectedProductIds = $pendingSubscription ? $pendingSubscription->products->pluck('id')->toArray() : [];
         $latestPayment = $pendingSubscription?->latestPayment;
 
+        $pricing = SubscriptionPaymentService::getPricingBreakdown();
+
         return view('pages.subscription', [
             'user' => $user,
             'products' => $products,
             'selectedProductIds' => $selectedProductIds,
             'pendingSubscription' => $pendingSubscription,
             'latestPayment' => $latestPayment,
-            'subscriptionAmount' => SubscriptionPaymentService::SUBSCRIPTION_AMOUNT,
+            'pricing' => $pricing,
+            'subscriptionAmount' => $pricing['total_payable'],
         ]);
     }
 
@@ -70,13 +73,13 @@ class SubscriptionController extends Controller
         }
 
         $validated = $request->validate([
-            'products' => ['required', 'array', 'min:3'],
+            'products' => ['required', 'array', 'min:1'],
             'products.*' => ['required', 'integer', 'exists:products,id'],
         ], [
-            'products.required' => 'Please select at least 3 products to continue.',
-            'products.array' => 'Invalid products payload.',
-            'products.min' => 'You must select at least 3 products.',
-            'products.*.exists' => 'Selected product is invalid or no longer available.',
+            'products.required' => 'Please select at least 1 course to continue.',
+            'products.array' => 'Invalid course selection.',
+            'products.min' => 'You must select at least 1 course to activate your account.',
+            'products.*.exists' => 'Selected course is invalid or no longer available.',
         ]);
 
         try {
@@ -170,7 +173,7 @@ class SubscriptionController extends Controller
 
         if ($verifiedPayment->isSuccess()) {
             $request->session()->flash('activation_success', true);
-            $request->session()->flash('success', '🎉 Congratulations! Your Thikana account is now active.');
+            $request->session()->flash('success', '🎉 Congratulations! Your SkopX account is now active.');
 
             if ($request->expectsJson()) {
                 return response()->json([
@@ -194,5 +197,40 @@ class SubscriptionController extends Controller
         }
 
         return redirect()->route('subscription.show')->withErrors(['payment' => $errorMessage]);
+    }
+
+    /**
+     * Download payment receipt in PDF format.
+     */
+    public function downloadReceipt(Request $request, ?SubscriptionPayment $payment = null)
+    {
+        $user = $request->user();
+
+        if (! $payment || ! $payment->exists) {
+            $payment = SubscriptionPayment::where('user_id', $user->id)
+                ->where('status', SubscriptionPayment::STATUS_SUCCESS)
+                ->latest()
+                ->first();
+
+            if (! $payment) {
+                return redirect()->route('subscription.show')->withErrors(['payment' => 'No completed payment receipt found.']);
+            }
+        }
+
+        if ($payment->user_id !== $user->id) {
+            abort(403, 'Unauthorized access to payment receipt.');
+        }
+
+        $subscription = $payment->subscription ? $payment->subscription->load('products') : null;
+        $pricing = SubscriptionPaymentService::getPricingBreakdown();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.subscription_receipt', [
+            'payment' => $payment,
+            'subscription' => $subscription,
+            'user' => $user,
+            'pricing' => $pricing,
+        ]);
+
+        return $pdf->download('SkopX_Subscription_Receipt_' . $payment->order_reference . '.pdf');
     }
 }

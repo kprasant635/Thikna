@@ -25,7 +25,7 @@ class EnsureUserIsActive
                 ], 403);
             }
 
-            return redirect()->route('subscription.show')->with('warning', 'Please select your products and complete the subscription to activate your account.');
+            return redirect()->route('subscription.show')->with('warning', 'Please purchase at least 1 course to activate your account and access member benefits.');
         }
 
         return $next($request);

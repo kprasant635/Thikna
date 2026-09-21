@@ -1,4 +1,3 @@
-
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
@@ -44,11 +43,20 @@ Route::prefix('rentals')->name('rentals.')->group(function () {
 
 Route::get('/category/{category}', [ShopController::class, 'category'])->name('category.show');
 
-// Authenticated routes (Pending & Active users)
+// Authenticated routes (Accessible to both Pending & Active users)
 Route::middleware('auth')->group(function () {
+    // User Dashboard & Profile (accessible immediately after registration)
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard/profile', [DashboardController::class, 'profile'])->name('dashboard.profile');
+    Route::put('/dashboard/profile', [DashboardController::class, 'updateProfile'])->name('dashboard.profile.update');
+    Route::get('/dashboard/referrals', [DashboardController::class, 'referrals'])->name('dashboard.referrals');
+    Route::get('/dashboard/idcard/download', [DashboardController::class, 'downloadIdCard'])->name('dashboard.idcard.download');
+
+    // Subscription & Course Purchase
     Route::get('/subscription', [SubscriptionController::class, 'show'])->name('subscription.show');
     Route::post('/subscription/checkout', [SubscriptionController::class, 'processSelection'])->name('subscription.checkout');
     Route::post('/subscription/payment/verify', [SubscriptionController::class, 'verifyPayment'])->name('subscription.payment.verify');
+    Route::get('/subscription/receipt/{payment?}', [SubscriptionController::class, 'downloadReceipt'])->name('subscription.receipt.download');
 
     Route::post('/logout', function (Request $request) {
         Auth::logout();
@@ -57,12 +65,8 @@ Route::middleware('auth')->group(function () {
         return redirect()->route('home');
     })->name('logout');
 
-    // Protected Active User Routes
+    // Protected Active User Routes (Requires purchasing at least 1 course)
     Route::middleware('active')->group(function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::get('/dashboard/profile', [DashboardController::class, 'profile'])->name('dashboard.profile');
-        Route::put('/dashboard/profile', [DashboardController::class, 'updateProfile'])->name('dashboard.profile.update');
-
         // Course & Video Learning Routes
         Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
         Route::get('/courses/{course}', [CourseController::class, 'show'])->name('courses.show');

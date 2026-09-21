@@ -20,19 +20,19 @@ class SubscriptionTest extends TestCase
         $this->seed(ProductSeeder::class);
     }
 
-    public function test_pending_user_accessing_dashboard_is_redirected_to_subscription(): void
+    public function test_pending_user_can_access_dashboard(): void
     {
         $user = User::create([
             'name' => 'Pending User',
             'phone' => '9876543210',
             'status' => User::STATUS_PENDING,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $response = $this->actingAs($user)->get(route('dashboard'));
 
-        $response->assertRedirect(route('subscription.show'));
-        $response->assertSessionHas('warning');
+        $response->assertStatus(200);
+        $response->assertSee('Pending (Needs 1 Course)');
     }
 
     public function test_subscription_page_renders_with_16_products(): void
@@ -41,31 +41,32 @@ class SubscriptionTest extends TestCase
             'name' => 'Test User',
             'phone' => '9876543210',
             'status' => User::STATUS_PENDING,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $response = $this->actingAs($user)->get(route('subscription.show'));
 
         $response->assertStatus(200);
-        $response->assertSee('Welcome to Thikana!');
+        $response->assertSee('Welcome to SKOP-X!');
         $response->assertSee('Product (Education / Training)');
         $response->assertSee('Story (Billion/Story)');
-        $response->assertSee('Subscription Fee: ₹200');
+        $response->assertSee('TOTAL PAYABLE');
+        $response->assertSee('₹251.32');
     }
 
-    public function test_selecting_less_than_3_products_fails_validation(): void
+    public function test_selecting_less_than_1_product_fails_validation(): void
     {
         $user = User::create([
             'name' => 'Test User',
             'phone' => '9876543210',
             'status' => User::STATUS_PENDING,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
-        // Submit 2 products only
+        // Submit 0 products
         $response = $this->actingAs($user)
             ->postJson(route('subscription.checkout'), [
-                'products' => [1, 2],
+                'products' => [],
             ]);
 
         $response->assertStatus(422);
@@ -78,25 +79,25 @@ class SubscriptionTest extends TestCase
             'name' => 'Test User',
             'phone' => '9876543210',
             'status' => User::STATUS_PENDING,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $response = $this->actingAs($user)
             ->postJson(route('subscription.checkout'), [
-                'products' => [1, 2, 9999],
+                'products' => [9999],
             ]);
 
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors(['products.2']);
+        $response->assertJsonValidationErrors(['products.0']);
     }
 
-    public function test_selecting_at_least_3_valid_products_creates_pending_subscription_and_payment(): void
+    public function test_selecting_at_least_1_valid_product_creates_pending_subscription_and_payment(): void
     {
         $user = User::create([
             'name' => 'Test User',
             'phone' => '9876543210',
             'status' => User::STATUS_PENDING,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $response = $this->actingAs($user)
@@ -136,7 +137,7 @@ class SubscriptionTest extends TestCase
             'name' => 'Payment User',
             'phone' => '9876543210',
             'status' => User::STATUS_PENDING,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $subscription = Subscription::create([
@@ -190,7 +191,7 @@ class SubscriptionTest extends TestCase
             'name' => 'Idempotent User',
             'phone' => '9876543210',
             'status' => User::STATUS_ACTIVE,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $subscription = Subscription::create([
@@ -232,7 +233,7 @@ class SubscriptionTest extends TestCase
             'name' => 'Failed Payment User',
             'phone' => '9876543210',
             'status' => User::STATUS_PENDING,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $subscription = Subscription::create([
@@ -274,7 +275,7 @@ class SubscriptionTest extends TestCase
             'name' => 'Active User',
             'phone' => '9876543210',
             'status' => User::STATUS_ACTIVE,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $response = $this->actingAs($user)->get(route('subscription.show'));
@@ -288,13 +289,13 @@ class SubscriptionTest extends TestCase
             'name' => 'Active User',
             'phone' => '9876543210',
             'status' => User::STATUS_ACTIVE,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $response = $this->actingAs($user)->get(route('dashboard'));
 
         $response->assertStatus(200);
-        $response->assertSee('Welcome to Thikana, Active User');
+        $response->assertSee('Welcome to SKOP-X, Active User');
     }
 
     public function test_returning_pending_user_login_redirects_to_subscription(): void
@@ -303,14 +304,14 @@ class SubscriptionTest extends TestCase
             'name' => 'Pending Login User',
             'phone' => '9876543210',
             'status' => User::STATUS_PENDING,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $response = $this->post(route('login.submit'), [
             'phone' => '9876543210',
         ]);
 
-        $response->assertRedirect(route('subscription.show'));
+        $response->assertRedirect(route('dashboard'));
         $this->assertTrue(auth()->check());
     }
 
@@ -320,7 +321,7 @@ class SubscriptionTest extends TestCase
             'name' => 'Active Login User',
             'phone' => '9876543210',
             'status' => User::STATUS_ACTIVE,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $response = $this->post(route('login.submit'), [
@@ -329,5 +330,105 @@ class SubscriptionTest extends TestCase
 
         $response->assertRedirect(route('dashboard'));
         $this->assertTrue(auth()->check());
+    }
+
+    public function test_active_user_can_download_subscription_receipt_pdf(): void
+    {
+        $user = User::create([
+            'name' => 'Active PDF User',
+            'phone' => '9876543210',
+            'status' => User::STATUS_ACTIVE,
+            'address' => 'Bhubaneswar',
+        ]);
+
+        $subscription = Subscription::create([
+            'user_id' => $user->id,
+            'amount' => 200,
+            'status' => Subscription::STATUS_ACTIVE,
+            'activated_at' => now(),
+        ]);
+
+        $payment = SubscriptionPayment::create([
+            'subscription_id' => $subscription->id,
+            'user_id' => $user->id,
+            'order_reference' => 'SUB-PDFTEST123',
+            'gateway_transaction_id' => 'TXN-PDF-999',
+            'amount' => 200,
+            'status' => SubscriptionPayment::STATUS_SUCCESS,
+            'paid_at' => now(),
+        ]);
+
+        $response = $this->actingAs($user)->get(route('subscription.receipt.download'));
+
+        $response->assertStatus(200);
+        $this->assertEquals('application/pdf', $response->headers->get('content-type'));
+        $this->assertStringContainsString('SkopX_Subscription_Receipt_SUB-PDFTEST123.pdf', $response->headers->get('content-disposition'));
+    }
+
+    public function test_user_can_upload_profile_photo_and_download_id_card(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+
+        $user = User::create([
+            'name' => 'Profile User',
+            'phone' => '9876543210',
+            'status' => User::STATUS_ACTIVE,
+            'address' => 'Bhubaneswar',
+            'referral_code' => 'THK123456',
+        ]);
+
+        $file = \Illuminate\Http\UploadedFile::fake()->image('avatar.jpg', 300, 300);
+
+        $response = $this->actingAs($user)->put(route('dashboard.profile.update'), [
+            'name' => 'Profile User Updated',
+            'address' => 'New Address Bhubaneswar',
+            'profile_photo' => $file,
+        ]);
+
+        $response->assertRedirect(route('dashboard.profile'));
+
+        $user->refresh();
+        $this->assertNotNull($user->profile_photo);
+        \Illuminate\Support\Facades\Storage::disk('public')->assertExists($user->profile_photo);
+
+        $downloadResponse = $this->actingAs($user)->get(route('dashboard.idcard.download'));
+        $downloadResponse->assertStatus(200);
+        $this->assertEquals('application/pdf', $downloadResponse->headers->get('content-type'));
+    }
+
+    public function test_user_can_access_referrals_list_page(): void
+    {
+        $referrer = User::create([
+            'name' => 'Referrer User',
+            'phone' => '9876543210',
+            'status' => User::STATUS_ACTIVE,
+            'address' => 'Bhubaneswar',
+            'referral_code' => 'THK999888',
+        ]);
+
+        $referred1 = User::create([
+            'name' => 'Referred Member One',
+            'phone' => '9876543211',
+            'status' => User::STATUS_ACTIVE,
+            'address' => 'Cuttack',
+            'referred_by_id' => $referrer->id,
+        ]);
+
+        $referred2 = User::create([
+            'name' => 'Referred Member Two',
+            'phone' => '9876543212',
+            'status' => User::STATUS_PENDING,
+            'address' => 'Puri',
+            'referred_by_id' => $referrer->id,
+        ]);
+
+        $response = $this->actingAs($referrer)->get(route('dashboard.referrals'));
+
+        $response->assertStatus(200);
+        $response->assertSee('My Referral List');
+        $response->assertSee('Referred Member One');
+        $response->assertSee('Referred Member Two');
+        $response->assertSee('Active (Subscribed)');
+        $response->assertSee('Pending (Unsubscribed)');
     }
 }

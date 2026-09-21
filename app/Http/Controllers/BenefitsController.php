@@ -13,7 +13,7 @@ class BenefitsController extends Controller
     ) {}
 
     /**
-     * Display exclusive Thikana member benefits unlocked after certification.
+     * Display exclusive SkopX member benefits unlocked after certification.
      */
     public function index(Request $request): View
     {
@@ -23,7 +23,7 @@ class BenefitsController extends Controller
         $benefits = [
             [
                 'id' => 1,
-                'title' => '🌟 Verified Thikana Member Badge',
+                'title' => '🌟 Verified SkopX Member Badge',
                 'description' => 'Display a golden verified badge on all your yellow-pages business listings and profile.',
                 'status' => 'Unlocked',
                 'category' => 'Trust & Visibility',

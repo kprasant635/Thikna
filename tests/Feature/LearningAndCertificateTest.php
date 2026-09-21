@@ -31,7 +31,7 @@ class LearningAndCertificateTest extends TestCase
             'name' => 'Active Learner',
             'phone' => '9876543210',
             'status' => User::STATUS_ACTIVE,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $subscription = Subscription::create([
@@ -57,7 +57,7 @@ class LearningAndCertificateTest extends TestCase
             'name' => 'Restricted Learner',
             'phone' => '9876543210',
             'status' => User::STATUS_ACTIVE,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $subscription = Subscription::create([
@@ -83,7 +83,7 @@ class LearningAndCertificateTest extends TestCase
             'name' => 'Progress User',
             'phone' => '9876543210',
             'status' => User::STATUS_ACTIVE,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $subscription = Subscription::create([
@@ -141,7 +141,7 @@ class LearningAndCertificateTest extends TestCase
             'name' => 'Course Finisher',
             'phone' => '9876543210',
             'status' => User::STATUS_ACTIVE,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $subscription = Subscription::create([
@@ -175,7 +175,7 @@ class LearningAndCertificateTest extends TestCase
             'name' => 'Partial Finisher',
             'phone' => '9876543210',
             'status' => User::STATUS_ACTIVE,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $subscription = Subscription::create([
@@ -217,7 +217,7 @@ class LearningAndCertificateTest extends TestCase
             'name' => 'Master Student',
             'phone' => '9876543210',
             'status' => User::STATUS_ACTIVE,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $subscription = Subscription::create([
@@ -263,7 +263,7 @@ class LearningAndCertificateTest extends TestCase
         $benefitsResponse = $this->actingAs($user)->get(route('benefits.index'));
         $benefitsResponse->assertStatus(200);
         $benefitsResponse->assertSee('Exclusive Member Benefits');
-        $benefitsResponse->assertSee('Verified Thikana Member Badge');
+        $benefitsResponse->assertSee('Verified SkopX Member Badge');
     }
 
     public function test_certificate_generation_is_idempotent(): void
@@ -272,7 +272,7 @@ class LearningAndCertificateTest extends TestCase
             'name' => 'Idempotent Student',
             'phone' => '9876543210',
             'status' => User::STATUS_ACTIVE,
-            'address' => 'Guwahati',
+            'address' => 'Bhubaneswar',
         ]);
 
         $subscription = Subscription::create([
