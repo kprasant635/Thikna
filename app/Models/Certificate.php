@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 class Certificate extends Model
 {
     use HasFactory;
+    //test
 
     protected $fillable = [
         'user_id',
