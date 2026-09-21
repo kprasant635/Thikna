@@ -242,8 +242,7 @@
 
             <div class="cert-header">
                 <div class="cert-brand">
-                    <div class="cert-brand-mark">T</div>
-                    <div class="cert-brand-name">SkopX</div>
+                    <img src="{{ asset('images/skopx-logo.png') }}" alt="SKOP-X Logo" style="height: 54px; width: auto; object-fit: contain;">
                 </div>
                 <div class="cert-title-main">Certificate of Completion</div>
                 <div class="cert-sub-title">Educational &amp; Skill Development Masterclasses</div>

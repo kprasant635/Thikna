@@ -152,7 +152,9 @@
 
     <div class="id-card-wrapper">
         <div class="id-header">
-            <div class="brand-logo">SKOP-X</div>
+            <div class="brand-logo" style="text-align: center;">
+                <img src="{{ public_path('images/skopx-logo.png') }}" style="height: 34px; width: auto;" alt="SKOP-X">
+            </div>
             <div class="brand-tagline">Official Digital Member Pass</div>
         </div>
 

@@ -9,6 +9,8 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <link rel="icon" type="image/png" href="{{ asset('images/skopx-logo.png') }}">
+    <link rel="shortcut icon" href="{{ asset('images/skopx-logo.png') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <script src="{{ asset('js/theme.js') }}"></script>
@@ -26,9 +28,8 @@
                             stroke-linecap="round" />
                     </svg>
                 </button>
-                <a class="brand" href="{{ route('home') }}">
-                    <div class="brand-mark">T</div>
-                    <div class="brand-name">SkopX</div>
+                <a class="brand" href="{{ route('home') }}" style="display:flex;align-items:center;gap:10px;">
+                    <img src="{{ asset('images/skopx-logo.png') }}" alt="SKOP-X Logo" style="height: 38px; width: auto; object-fit: contain;">
                 </a>
             </div>
             <div class="dash-header-center">

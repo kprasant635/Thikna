@@ -1,11 +1,7 @@
 <header class="site-header">
   <div class="wrap header-row1">
-    <a class="brand" href="{{ route('home') }}">
-      <div class="brand-mark" style="background:linear-gradient(135deg,#1a3a8f,#2563eb);border-radius:8px;font-family:'Poppins',sans-serif;font-size:11px;font-weight:800;letter-spacing:-0.5px;width:auto;padding:6px 10px;height:auto;">SKOP-X</div>
-      <div>
-        <div class="brand-name" style="font-family:'Poppins',sans-serif;color:#0a1628;font-weight:800;font-size:22px;">SKOP-X</div>
-        <div class="brand-tagline" style="font-size:10px;color:#64748b;font-weight:500;margin-top:-2px;font-family:'Poppins',sans-serif;">Learn | Grow | Earn | Together</div>
-      </div>
+    <a class="brand" href="{{ route('home') }}" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+      <img src="{{ asset('images/skopx-logo.png') }}" alt="SKOP-X Logo" style="height: 44px; width: auto; object-fit: contain;">
     </a>
 
     {{-- Search bar --}}
@@ -53,8 +49,7 @@
   <div class="sx-mobile-nav" id="sx-mobile-nav">
     <div class="sx-mobile-nav-header">
       <div style="display:flex;align-items:center;gap:8px;">
-        <div style="background:linear-gradient(135deg,#1a3a8f,#2563eb);border-radius:6px;padding:4px 8px;font-size:10px;font-weight:800;color:#fff;font-family:'Poppins',sans-serif;">SKOP-X</div>
-        <span style="font-family:'Poppins',sans-serif;font-weight:700;font-size:16px;color:#0a1628;">SKOP-X</span>
+        <img src="{{ asset('images/skopx-logo.png') }}" alt="SKOP-X Logo" style="height: 36px; width: auto; object-fit: contain;">
       </div>
       <button class="sx-mobile-close" onclick="toggleMobileMenu()" aria-label="Close menu">✕</button>
     </div>

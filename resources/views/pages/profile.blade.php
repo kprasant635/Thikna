@@ -124,7 +124,9 @@
                     <!-- Graphical Virtual ID Card -->
                     <div class="virtual-id-card" id="virtualIdCard">
                         <div class="vcard-header">
-                            <div class="vcard-brand">SKOP-X</div>
+                            <div class="vcard-brand" style="display:flex;align-items:center;justify-content:center;">
+                                <img src="{{ asset('images/skopx-logo.png') }}" alt="SKOP-X Logo" style="height: 32px; width: auto; object-fit: contain;">
+                            </div>
                             <div class="vcard-title">OFFICIAL DIGITAL MEMBER PASS</div>
                         </div>
 

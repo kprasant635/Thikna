@@ -11,11 +11,9 @@
       {{-- Brand Column --}}
       <div>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
-          <div style="background:linear-gradient(135deg,#1a3a8f,#2563eb);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;color:#fff;font-family:'Poppins',sans-serif;">SKOP-X</div>
-          <div style="font-family:'Poppins',sans-serif;font-size:18px;font-weight:800;color:#fff;">SKOP-X</div>
+          <img src="{{ asset('images/skopx-logo.png') }}" alt="SKOP-X Logo" style="height: 48px; width: auto; object-fit: contain;">
         </div>
-        <div style="font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:12px;font-family:'Poppins',sans-serif;">Learn | Grow | Earn | Together</div>
-        <p style="font-size:12px;color:rgba(255,255,255,0.5);max-width:280px;line-height:1.6;font-family:'Poppins',sans-serif;">
+        <p style="font-size:12px;color:rgba(255,255,255,0.6);max-width:280px;line-height:1.6;font-family:'Poppins',sans-serif;margin-top:8px;">
           SKOP-X is a platform for learning, skill development and income opportunities. Together we build a better tomorrow.
         </p>
         <div style="display:flex;gap:10px;margin-top:16px;">

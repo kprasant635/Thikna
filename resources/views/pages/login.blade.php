@@ -149,7 +149,9 @@
   <div class="login-layout">
     <div class="login-card">
       <div class="login-header">
-        <div class="login-brand-badge">⚡ SKOP-X Platform</div>
+        <div style="margin-bottom: 16px;">
+          <img src="{{ asset('images/skopx-logo.png') }}" alt="SKOP-X Logo" style="height: 52px; width: auto; object-fit: contain;">
+        </div>
         <h1>Welcome Back 👋</h1>
         <p>Enter your registered 10-digit mobile number to log in</p>
       </div>

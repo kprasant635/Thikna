@@ -312,7 +312,9 @@
   <div class="register-layout">
     <div class="register-card">
       <div class="register-header">
-        <div class="register-brand-badge">⚡ SKOP-X Platform</div>
+        <div style="margin-bottom: 16px;">
+          <img src="{{ asset('images/skopx-logo.png') }}" alt="SKOP-X Logo" style="height: 52px; width: auto; object-fit: contain;">
+        </div>
         <h1>Create Your Account</h1>
         <p>Start your journey with SKOP-X to access video courses, practical training, and real opportunities.</p>
       </div>

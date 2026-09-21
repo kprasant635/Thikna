@@ -168,7 +168,9 @@
     <table class="header-table">
         <tr>
             <td>
-                <div class="brand-title">SKOP-X</div>
+                <div class="brand-title">
+                    <img src="{{ public_path('images/skopx-logo.png') }}" style="height: 36px; width: auto;" alt="SKOP-X">
+                </div>
                 <div class="brand-subtitle">Official Payment Receipt &amp; Tax Invoice</div>
             </td>
             <td class="receipt-title-box">
