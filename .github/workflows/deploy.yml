@@ -50,13 +50,13 @@ jobs:
             --exclude='vendor' \
             --exclude='.env' \
             --exclude='storage' \
-            -czf deploy.tar.gz .
+            -czf /tmp/skopx-deploy.tar.gz .
 
       - name: Upload deployment package
         run: |
           scp \
             -P ${{ secrets.HOSTINGER_PORT }} \
-            deploy.tar.gz \
+            /tmp/skopx-deploy.tar.gz \
             ${{ secrets.HOSTINGER_USER }}@${{ secrets.HOSTINGER_HOST }}:/tmp/skopx-deploy.tar.gz
 
       - name: Deploy on Hostinger
