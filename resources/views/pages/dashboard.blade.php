@@ -22,7 +22,8 @@
                     @endif
                 </div>
                 <button type="button" class="dash-welcome-dismiss"
-                    onclick="document.getElementById('welcome-banner').style.display='none'" title="Dismiss">&times;</button>
+                    onclick="document.getElementById('welcome-banner').style.display='none'"
+                    title="Dismiss">&times;</button>
             </div>
         </div>
     @endif
@@ -269,7 +270,7 @@
             </div>
         </div>
 
-        {{-- My Listings --}}
+        {{-- My Listings 
         <div class="dash-card">
             <div class="dash-card-header">
                 <h3>My Listings</h3>
@@ -282,9 +283,9 @@
                         First Listing</a>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
-        {{-- Quick Actions --}}
+        {{-- Quick Actions 
         <div class="dash-card">
             <div class="dash-card-header">
                 <h3>Quick Actions</h3>
@@ -316,7 +317,7 @@
                 </div>
             </div>
         </div>
-
+            --}}
         {{-- Account Information --}}
         <div class="dash-card">
             <div class="dash-card-header">
