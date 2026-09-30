@@ -35,6 +35,27 @@ class SubscriptionTest extends TestCase
         $response->assertSee('Pending (Needs 1 Course)');
     }
 
+    public function test_dashboard_displays_working_referral_share_links(): void
+    {
+        $user = User::create([
+            'name' => 'Referral User',
+            'phone' => '9876543210',
+            'referral_code' => 'SKOPX12345',
+            'status' => User::STATUS_PENDING,
+            'address' => 'Bhubaneswar',
+        ]);
+
+        $response = $this->actingAs($user)->get(route('dashboard'));
+
+        $response->assertOk()
+            ->assertSee('https://www.facebook.com/sharer/sharer.php?u=' . urlencode(route('register', ['ref' => 'SKOPX12345'])), false)
+            ->assertSee('https://wa.me/?text=' . urlencode('Join SKOP-X using my referral link: ' . route('register', ['ref' => 'SKOPX12345'])), false)
+            ->assertSee('shareReferralOnInstagram()', false)
+            ->assertSee('Facebook')
+            ->assertSee('WhatsApp')
+            ->assertSee('Instagram');
+    }
+
     public function test_subscription_page_renders_with_16_products(): void
     {
         $user = User::create([

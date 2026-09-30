@@ -34,7 +34,7 @@
         <a href="#" style="color:rgba(255,255,255,0.6);font-family:'Poppins',sans-serif;">SKOP-X Course</a>
         <a href="#" style="color:rgba(255,255,255,0.6);font-family:'Poppins',sans-serif;">Achievers</a>
         <a href="{{ route('register') }}" style="color:rgba(255,255,255,0.6);font-family:'Poppins',sans-serif;">Join Now</a>
-        <a href="#" style="color:rgba(255,255,255,0.6);font-family:'Poppins',sans-serif;">Contact Us</a>
+        <a href="{{ route('contact') }}" style="color:rgba(255,255,255,0.6);font-family:'Poppins',sans-serif;">Contact Us</a>
       </div>
 
       {{-- Support --}}

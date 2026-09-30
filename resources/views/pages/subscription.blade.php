@@ -546,7 +546,7 @@
         <div class="modal-card">
             <div class="modal-header">
                 <div class="shield-icon">🛡️</div>
-                <h2>SkopX Secure Payment</h2>
+                <h2>Skop-X Secure Payment</h2>
                 <p>Server-Verified Payment Gateway</p>
             </div>
 

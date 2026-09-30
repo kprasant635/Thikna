@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -55,6 +56,82 @@ class ProfileAndReferralsTest extends TestCase
         $this->assertEquals('New Full Address', $user->address);
         $this->assertNotNull($user->profile_photo);
         Storage::disk('public')->assertExists($user->profile_photo);
+    }
+
+    public function test_user_can_save_encrypted_bank_payment_details(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->put(route('dashboard.payment-details.update'), [
+            'payment_method' => 'bank',
+            'bank_account_holder' => 'Priya Das',
+            'bank_name' => 'State Bank of India',
+            'bank_account_number' => '123456789012',
+            'bank_ifsc' => 'SBIN0001234',
+        ]);
+
+        $response->assertRedirect(route('dashboard.profile'))
+            ->assertSessionHas('success');
+
+        $user->refresh();
+        $this->assertSame('bank', $user->payment_method);
+        $this->assertSame('Priya Das', $user->bank_account_holder);
+        $this->assertSame('State Bank of India', $user->bank_name);
+        $this->assertSame('123456789012', $user->bank_account_number);
+        $this->assertSame('SBIN0001234', $user->bank_ifsc);
+        $this->assertNotSame('123456789012', DB::table('users')->where('id', $user->id)->value('bank_account_number'));
+
+        $this->actingAs($user)->get(route('dashboard.profile'))
+            ->assertSee('Saved account ending in')
+            ->assertSee('9012. Leave blank to keep it.')
+            ->assertDontSee('123456789012');
+    }
+
+    public function test_user_can_save_upi_payment_details(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->put(route('dashboard.payment-details.update'), [
+            'payment_method' => 'upi',
+            'upi_id' => 'priya.das@okaxis',
+        ]);
+
+        $response->assertRedirect(route('dashboard.profile'))
+            ->assertSessionHas('success');
+
+        $user->refresh();
+        $this->assertSame('upi', $user->payment_method);
+        $this->assertSame('priya.das@okaxis', $user->upi_id);
+        $this->assertNull($user->bank_account_number);
+    }
+
+    public function test_invalid_bank_details_are_not_saved_or_flashed_back(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->put(route('dashboard.payment-details.update'), [
+            'payment_method' => 'bank',
+            'bank_account_holder' => 'Priya Das',
+            'bank_name' => 'State Bank of India',
+            'bank_account_number' => '123456789012',
+            'bank_ifsc' => 'invalid',
+        ]);
+
+        $response->assertRedirect(route('dashboard.profile'))
+            ->assertSessionHasErrors('bank_ifsc')
+            ->assertSessionMissing('_old_input.bank_account_number');
+
+        $this->assertNull($user->fresh()->payment_method);
+    }
+
+    public function test_guest_cannot_update_payment_details(): void
+    {
+        $response = $this->put(route('dashboard.payment-details.update'), [
+            'payment_method' => 'upi',
+            'upi_id' => 'priya.das@okaxis',
+        ]);
+
+        $response->assertRedirect(route('register'));
     }
 
     public function test_authenticated_user_can_view_referrals_list(): void

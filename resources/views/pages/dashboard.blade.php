@@ -4,6 +4,57 @@
 
 @section('content')
 
+    @push('styles')
+        <style>
+            .referral-share-actions {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-top: 12px;
+            }
+
+            .referral-share-button {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 7px;
+                min-height: 38px;
+                padding: 8px 12px;
+                border: 0;
+                border-radius: 7px;
+                color: #fff;
+                font: inherit;
+                font-size: 13px;
+                font-weight: 600;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            .referral-share-button svg {
+                width: 17px;
+                height: 17px;
+                flex: none;
+            }
+
+            .referral-share-facebook {
+                background: #1877f2;
+            }
+
+            .referral-share-whatsapp {
+                background: #168b54;
+            }
+
+            .referral-share-instagram {
+                background: #b83271;
+            }
+
+            .referral-share-button:focus-visible {
+                outline: 3px solid #f59e0b;
+                outline-offset: 2px;
+            }
+        </style>
+    @endpush
+
     {{-- Flash Success / Activation Message --}}
     @if (session('success'))
         <div class="dash-welcome-banner" id="welcome-banner">
@@ -175,6 +226,11 @@
                     Share your code or link with friends. Anyone can register using your referral link anytime!
                 </p>
 
+                @php
+                    $referralLink = route('register', ['ref' => Auth::user()->referral_code]);
+                    $referralShareText = 'Join SKOP-X using my referral link: ' . $referralLink;
+                @endphp
+
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
                     <div
                         style="background: #f1f5f9; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 8px 14px; font-family: monospace; font-size: 15px; font-weight: 700; color: #1a3a8f;">
@@ -182,11 +238,30 @@
                     </div>
                     <div style="flex: 1; min-width: 220px; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 8px 12px; font-size: 13px; color: #334155; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
                         id="refLinkText">
-                        {{ route('register') }}?ref={{ Auth::user()->referral_code }}
+                        {{ $referralLink }}
                     </div>
                     <button type="button" class="btn btn-primary" onclick="copyReferralLink()"
                         style="padding: 9px 16px; font-size: 13px; border-radius: 8px; white-space: nowrap;">
                         📋 Copy Link
+                    </button>
+                </div>
+                <div class="referral-share-actions" aria-label="Share referral link">
+                    <a class="referral-share-button referral-share-facebook"
+                        href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($referralLink) }}"
+                        target="_blank" rel="noopener noreferrer" aria-label="Share referral link on Facebook">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.4 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.6V3.6c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2v2.3H7.4v3.1h2.7v8h3.3z"/></svg>
+                        Facebook
+                    </a>
+                    <a class="referral-share-button referral-share-whatsapp"
+                        href="https://wa.me/?text={{ urlencode($referralShareText) }}"
+                        target="_blank" rel="noopener noreferrer" aria-label="Share referral link on WhatsApp">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a9.8 9.8 0 0 0-8.4 14.8L2.3 22l5.4-1.4A10 10 0 1 0 12 2zm0 17.8a8 8 0 0 1-4.1-1.1l-.3-.2-3.2.8.9-3.1-.2-.3A8 8 0 1 1 12 19.8zm4.4-6c-.2-.1-1.5-.8-1.8-.9-.2-.1-.4-.1-.5.1l-.8 1c-.1.2-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.2-.3.2-.4.7-1.3.1-.2 0-.4 0-.5l-.8-1.9c-.2-.5-.5-.4-.7-.4h-.5c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.3s1 2.6 1.1 2.8c.1.2 2 3 4.8 4.1 1.8.7 2.5.8 3.4.6.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.2-1.2s-.2-.2-.4-.3z"/></svg>
+                        WhatsApp
+                    </a>
+                    <button type="button" class="referral-share-button referral-share-instagram"
+                        onclick="shareReferralOnInstagram()" aria-label="Share referral link on Instagram">
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.8" r="1.2" fill="currentColor"/></svg>
+                        Instagram
                     </button>
                 </div>
                 <div id="copyToast"
@@ -210,17 +285,57 @@
 
     @push('scripts')
         <script>
-            function copyReferralLink() {
+            async function copyReferralLink(successMessage = 'Referral link copied to clipboard!') {
                 const linkText = document.getElementById('refLinkText').innerText.trim();
-                navigator.clipboard.writeText(linkText).then(() => {
-                    const toast = document.getElementById('copyToast');
+                const toast = document.getElementById('copyToast');
+
+                try {
+                    if (navigator.clipboard && window.isSecureContext) {
+                        await navigator.clipboard.writeText(linkText);
+                    } else {
+                        const temporaryInput = document.createElement('textarea');
+                        temporaryInput.value = linkText;
+                        temporaryInput.style.position = 'fixed';
+                        temporaryInput.style.opacity = '0';
+                        document.body.appendChild(temporaryInput);
+                        temporaryInput.select();
+                        const copied = document.execCommand('copy');
+                        temporaryInput.remove();
+
+                        if (!copied) {
+                            throw new Error('Clipboard copy was not available.');
+                        }
+                    }
+
+                    toast.textContent = successMessage;
                     toast.style.display = 'block';
-                    setTimeout(() => {
+                    window.setTimeout(() => {
                         toast.style.display = 'none';
-                    }, 3000);
-                }).catch(err => {
-                    alert('Referral Link: ' + linkText);
-                });
+                    }, 4000);
+                } catch (error) {
+                    window.prompt('Copy your referral link:', linkText);
+                }
+            }
+
+            async function shareReferralOnInstagram() {
+                const linkText = document.getElementById('refLinkText').innerText.trim();
+
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: 'Join SKOP-X',
+                            text: 'Join SKOP-X using my referral link:',
+                            url: linkText,
+                        });
+                        return;
+                    } catch (error) {
+                        if (error.name === 'AbortError') {
+                            return;
+                        }
+                    }
+                }
+
+                await copyReferralLink('Referral link copied. Paste it into your Instagram post, story, or message.');
             }
         </script>
     @endpush

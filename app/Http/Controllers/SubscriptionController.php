@@ -31,7 +31,7 @@ class SubscriptionController extends Controller
         }
 
         $products = Product::where('is_active', true)->get();
-        
+
         $pendingSubscription = $user->subscriptions()
             ->with(['products', 'latestPayment'])
             ->where('status', Subscription::STATUS_PENDING)
@@ -179,7 +179,8 @@ class SubscriptionController extends Controller
                 return response()->json([
                     'success' => true,
                     'message' => 'Payment verified successfully! Your account is now active.',
-                    'redirect_url' => route('dashboard'),
+                    // 'redirect_url' => route('dashboard'),
+                    'redirect_url' => route('courses.index'),
                 ]);
             }
 

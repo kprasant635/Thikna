@@ -45,6 +45,7 @@
 
     <div class="dash-profile-layout">
 
+        <div class="profile-details-column">
         <!-- Left Column: Personal Information Form -->
         <div class="dash-card">
             <div class="dash-card-header">
@@ -112,6 +113,80 @@
             </div>
         </div>
 
+        @php
+            $paymentMethod = old('payment_method', Auth::user()->payment_method ?? 'none');
+            $savedBankAccountNumber = Auth::user()->bank_account_number;
+        @endphp
+
+        <section class="dash-card payment-details-card">
+            <div class="dash-card-header">
+                <h3>Bank or UPI Details</h3>
+            </div>
+            <div class="dash-card-body">
+                <p class="payment-details-intro">Add the payment details you want to use for eligible payouts.</p>
+
+                <form method="POST" action="{{ route('dashboard.payment-details.update') }}" class="register-form"
+                    id="payment-details-form">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="field">
+                        <label for="payment_method">Payment method</label>
+                        <select name="payment_method" id="payment_method" required>
+                            <option value="none" @selected($paymentMethod === 'none')>No payment details</option>
+                            <option value="bank" @selected($paymentMethod === 'bank')>Bank transfer</option>
+                            <option value="upi" @selected($paymentMethod === 'upi')>UPI</option>
+                        </select>
+                    </div>
+
+                    <div class="payment-fields" id="bank-payment-fields" @if ($paymentMethod !== 'bank') hidden @endif>
+                        <div class="field">
+                            <label for="bank_account_holder">Account holder name</label>
+                            <input type="text" name="bank_account_holder" id="bank_account_holder"
+                                value="{{ old('bank_account_holder', Auth::user()->bank_account_holder) }}"
+                                autocomplete="name" maxlength="255">
+                        </div>
+                        <div class="field">
+                            <label for="bank_name">Bank name</label>
+                            <input type="text" name="bank_name" id="bank_name"
+                                value="{{ old('bank_name', Auth::user()->bank_name) }}" maxlength="255">
+                        </div>
+                        <div class="field">
+                            <label for="bank_account_number">Account number</label>
+                            <input type="password" name="bank_account_number" id="bank_account_number"
+                                value="" inputmode="numeric" autocomplete="new-password" maxlength="20">
+                            @if ($savedBankAccountNumber)
+                                <div class="payment-details-hint">Saved account ending in
+                                    {{ substr($savedBankAccountNumber, -4) }}. Leave blank to keep it.</div>
+                            @else
+                                <div class="payment-details-hint">8 to 20 digits. Stored encrypted.</div>
+                            @endif
+                        </div>
+                        <div class="field">
+                            <label for="bank_ifsc">IFSC code</label>
+                            <input type="text" name="bank_ifsc" id="bank_ifsc"
+                                value="{{ old('bank_ifsc', Auth::user()->bank_ifsc) }}" maxlength="11"
+                                autocapitalize="characters" autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="payment-fields" id="upi-payment-fields" @if ($paymentMethod !== 'upi') hidden @endif>
+                        <div class="field">
+                            <label for="upi_id">UPI ID</label>
+                            <input type="text" name="upi_id" id="upi_id"
+                                value="{{ old('upi_id', Auth::user()->upi_id) }}"
+                                placeholder="name@bank" autocomplete="off" maxlength="255">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="padding: 11px 20px;">
+                        Save Payment Details
+                    </button>
+                </form>
+            </div>
+        </section>
+        </div>
+
         <!-- Right Column: Virtual Member ID Card Preview & Actions -->
         <div class="id-card-section">
             <div class="dash-card">
@@ -125,7 +200,8 @@
                     <div class="virtual-id-card" id="virtualIdCard">
                         <div class="vcard-header">
                             <div class="vcard-brand" style="display:flex;align-items:center;justify-content:center;">
-                                <img src="{{ asset('images/skopx-logo.png') }}" alt="SKOP-X Logo" style="height: 32px; width: auto; object-fit: contain;">
+                                <img src="{{ asset('images/skopx-logo.png') }}" alt="SKOP-X Logo"
+                                    style="height: 32px; width: auto; object-fit: contain;">
                             </div>
                             <div class="vcard-title">OFFICIAL DIGITAL MEMBER PASS</div>
                         </div>
@@ -208,10 +284,31 @@
             </div>
         </div>
 
-     
-
         @push('scripts')
             <script>
+                const paymentMethodSelect = document.getElementById('payment_method');
+
+                if (paymentMethodSelect) {
+                    const updatePaymentFields = () => {
+                        const selectedMethod = paymentMethodSelect.value;
+                        const bankFields = document.getElementById('bank-payment-fields');
+                        const upiFields = document.getElementById('upi-payment-fields');
+
+                        bankFields.hidden = selectedMethod !== 'bank';
+                        upiFields.hidden = selectedMethod !== 'upi';
+
+                        bankFields.querySelectorAll('input').forEach((input) => {
+                            input.disabled = selectedMethod !== 'bank';
+                        });
+                        upiFields.querySelectorAll('input').forEach((input) => {
+                            input.disabled = selectedMethod !== 'upi';
+                        });
+                    };
+
+                    paymentMethodSelect.addEventListener('change', updatePaymentFields);
+                    updatePaymentFields();
+                }
+
                 function previewSelectedPhoto(input) {
                     if (input.files && input.files[0]) {
                         const reader = new FileReader();
@@ -414,6 +511,31 @@
                     align-items: start;
                 }
 
+                .profile-details-column {
+                    display: grid;
+                    gap: 24px;
+                    min-width: 0;
+                }
+
+                .payment-details-intro,
+                .payment-details-hint {
+                    color: var(--ink-soft);
+                    font-size: 13px;
+                    line-height: 1.5;
+                }
+
+                .payment-details-intro {
+                    margin-bottom: 18px;
+                }
+
+                .payment-details-hint {
+                    font-size: 12px;
+                }
+
+                .payment-fields[hidden] {
+                    display: none;
+                }
+
                 @media (max-width: 900px) {
                     .dash-profile-layout {
                         grid-template-columns: 1fr;
@@ -446,6 +568,8 @@
                 .register-form input[type="text"],
                 .register-form input[type="email"],
                 .register-form input[type="tel"],
+                .register-form input[type="password"],
+                .register-form select,
                 .register-form textarea {
                     width: 100%;
                     padding: 11px 14px;
@@ -459,6 +583,7 @@
                 }
 
                 .register-form input:focus,
+                .register-form select:focus,
                 .register-form textarea:focus {
                     outline: none;
                     border-color: var(--green-deep);
@@ -553,7 +678,7 @@
                 }
 
                 .vcard-header {
-                    background: linear-gradient(135deg, #0f5e2e 0%, #06371a 100%);
+                    background: linear-gradient(135deg, #fff 0%, #fff 100%);
                     color: white;
                     padding: 16px 12px 32px;
                 }

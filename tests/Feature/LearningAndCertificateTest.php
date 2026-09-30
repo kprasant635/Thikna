@@ -4,11 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\Certificate;
 use App\Models\Course;
-use App\Models\CourseVideo;
 use App\Models\Product;
 use App\Models\Subscription;
 use App\Models\User;
-use App\Models\UserVideoProgress;
 use Database\Seeders\CourseSeeder;
 use Database\Seeders\ProductSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -49,6 +47,29 @@ class LearningAndCertificateTest extends TestCase
         $response->assertSee('Product (Education / Training) Masterclass');
         $response->assertSee('Yoga (Exercise) Masterclass');
         $response->assertSee('Zumba (Exercise) Masterclass');
+    }
+
+    public function test_guest_can_browse_active_courses_with_video_thumbnails(): void
+    {
+        $course = Course::query()->whereNull('thumbnail')->firstOrFail();
+        $course->update(['thumbnail' => 'courses/custom-cover.jpg']);
+
+        $inactiveProduct = Product::create(['name' => 'Hidden Catalog Product']);
+        Course::create([
+            'product_id' => $inactiveProduct->id,
+            'title' => 'Hidden Catalog Course',
+            'slug' => 'hidden-catalog-course',
+            'is_active' => false,
+        ]);
+
+        $response = $this->get(route('courses.catalog'));
+
+        $response->assertOk()
+            ->assertSee('href="'.route('courses.catalog').'"', false)
+            ->assertSee('href="'.route('register').'" class="course-catalog-card"', false)
+            ->assertSee('storage/courses/custom-cover.jpg')
+            ->assertSee('img.youtube.com/vi/mCeYN9dx1io/hqdefault.jpg')
+            ->assertDontSee('Hidden Catalog Course');
     }
 
     public function test_user_cannot_access_unselected_course(): void

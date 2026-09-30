@@ -13,44 +13,45 @@
         <section class="sx-hero">
             <div class="sx-container">
                 <div class="sx-hero-inner">
-                    {{-- Left: Headlines --}}
-                    <div class="sx-hero-text">
-                        <h1>Skill Today<br>Better Tomorrow</h1>
-                        <div class="sx-hero-tagline">Learn | Grow | Earn | Together</div>
+                    <div class="sx-course-carousel" data-course-carousel role="region" aria-roledescription="carousel" aria-label="Courses">
+                        @forelse ($courses as $course)
+                            <article class="sx-course-slide" role="group" aria-roledescription="slide"
+                                aria-label="Course {{ $loop->iteration }} of {{ $loop->count }}" @if (!$loop->first) hidden @endif>
+                                <div class="sx-course-copy">
+                                    <div class="sx-course-eyebrow">SKOP-X COURSE {{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
+                                    <h1>{{ $course->title }}</h1>
+                                    <p class="sx-course-description">{{ $course->description ?: 'Build practical skills and take your next step with SKOP-X.' }}</p>
+                                    <a href="{{ route('register') }}" class="sx-btn-yellow">Join Now <span aria-hidden="true">→</span></a>
+                                </div>
 
-                        <div class="sx-hero-features">
-                            <div class="sx-hero-feature">
-                                <div class="sx-hero-feature-icon">📚</div>
-                                <span>Online Courses</span>
-                            </div>
-                            <div class="sx-hero-feature">
-                                <div class="sx-hero-feature-icon">👥</div>
-                                <span>Community Support</span>
-                            </div>
-                            <div class="sx-hero-feature">
-                                <div class="sx-hero-feature-icon">💰</div>
-                                <span>Income Opportunity</span>
-                            </div>
-                            <div class="sx-hero-feature">
-                                <div class="sx-hero-feature-icon">⭐</div>
-                                <span>Be an Achiever</span>
-                            </div>
-                        </div>
+                                <div class="sx-hero-img">
+                                    <img src="{{ asset('images/hero-female-learner.jpg') }}" alt="Learner studying {{ $course->title }}" @if ($loop->first) loading="eager" @else loading="lazy" @endif>
+                                </div>
+                            </article>
+                        @empty
+                            <article class="sx-course-slide sx-course-slide-empty">
+                                <div class="sx-course-copy">
+                                    <div class="sx-course-eyebrow">SKOP-X LEARNING</div>
+                                    <h1>Skill Today<br>Better Tomorrow</h1>
+                                    <p class="sx-course-description">Learn practical skills and grow with a supportive community.</p>
+                                    <a href="{{ route('register') }}" class="sx-btn-yellow">Join Now <span aria-hidden="true">→</span></a>
+                                </div>
+                                <div class="sx-hero-img">
+                                    <img src="{{ asset('images/hero-female-learner.jpg') }}" alt="SKOP-X learner" loading="eager">
+                                </div>
+                            </article>
+                        @endforelse
 
-                        <a href="{{ route('register') }}" class="sx-btn-yellow">Join Now →</a>
-                    </div>
-
-                    {{-- Center: Hero Image --}}
-                    <div class="sx-hero-img">
-                        <img src="{{ asset('images/hero-female-learner.jpg') }}" alt="SKOP-X Learner" loading="eager">
-                    </div>
-
-                    {{-- Right: Handwritten Quotes --}}
-                    <div class="sx-hero-right">
-                        <div class="sx-handwritten-mission">"Your<br>Success<br>Our Mission"</div>
-                        <div class="sx-hero-quote">
-                            "Learn<br>Upgrade<br>Earn<br>Be Independent"
-                        </div>
+                        @if ($courses->count() > 1)
+                            <div class="sx-course-controls">
+                                <span class="sx-course-count" aria-live="polite"><span data-course-current>01</span> / {{ str_pad((string) $courses->count(), 2, '0', STR_PAD_LEFT) }}</span>
+                                <div class="sx-course-arrows">
+                                    <button type="button" data-course-previous aria-label="Previous course">←</button>
+                                    <button type="button" data-course-toggle aria-label="Pause automatic slide rotation" aria-pressed="false">Ⅱ</button>
+                                    <button type="button" data-course-next aria-label="Next course">→</button>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -164,6 +165,9 @@
                     @foreach ($featuredVideos as $video)
                         <div class="sx-video-card">
                             <div class="sx-video-thumb">
+                                @if (!empty($video['thumbnail']))
+                                    <img src="{{ asset('images/' . $video['thumbnail']) }}" alt="" loading="lazy">
+                                @endif
                                 <div class="sx-video-play"></div>
                                 <div class="sx-video-duration">{{ $video['duration'] }}</div>
                             </div>
@@ -265,6 +269,68 @@
 
     @push('scripts')
         <script>
+            document.querySelectorAll('[data-course-carousel]').forEach((carousel) => {
+                const slides = Array.from(carousel.querySelectorAll('.sx-course-slide[aria-roledescription="slide"]'));
+                const currentCount = carousel.querySelector('[data-course-current]');
+                const rotationToggle = carousel.querySelector('[data-course-toggle]');
+
+                if (slides.length < 2 || !currentCount) return;
+
+                let activeIndex = 0;
+                let rotationTimer;
+                let rotationPaused = false;
+                const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+                const pauseRotation = () => {
+                    window.clearInterval(rotationTimer);
+                    rotationTimer = undefined;
+                };
+
+                const showSlide = (nextIndex) => {
+                    activeIndex = (nextIndex + slides.length) % slides.length;
+                    slides.forEach((slide, index) => {
+                        const isActive = index === activeIndex;
+                        slide.hidden = !isActive;
+                        slide.setAttribute('aria-hidden', String(!isActive));
+                    });
+                    currentCount.textContent = String(activeIndex + 1).padStart(2, '0');
+                };
+
+                const startRotation = () => {
+                    pauseRotation();
+                    if (rotationPaused || reducedMotion || document.hidden || carousel.matches(':hover') || carousel.contains(document.activeElement)) return;
+
+                    rotationTimer = window.setInterval(() => showSlide(activeIndex + 1), 5000);
+                };
+
+                carousel.querySelector('[data-course-previous]').addEventListener('click', () => {
+                    showSlide(activeIndex - 1);
+                    startRotation();
+                });
+                carousel.querySelector('[data-course-next]').addEventListener('click', () => {
+                    showSlide(activeIndex + 1);
+                    startRotation();
+                });
+                rotationToggle.addEventListener('click', () => {
+                    rotationPaused = !rotationPaused;
+                    rotationToggle.setAttribute('aria-pressed', String(rotationPaused));
+                    rotationToggle.setAttribute('aria-label', rotationPaused ? 'Resume automatic slide rotation' : 'Pause automatic slide rotation');
+                    rotationToggle.textContent = rotationPaused ? '▶' : 'Ⅱ';
+                    startRotation();
+                });
+
+                carousel.addEventListener('mouseenter', pauseRotation);
+                carousel.addEventListener('mouseleave', startRotation);
+                carousel.addEventListener('focusin', pauseRotation);
+                carousel.addEventListener('focusout', (event) => {
+                    if (!carousel.contains(event.relatedTarget)) {
+                        window.setTimeout(startRotation, 0);
+                    }
+                });
+                document.addEventListener('visibilitychange', startRotation);
+                startRotation();
+            });
+
             function refreshCaptcha() {
                 const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
                 let captcha = '';

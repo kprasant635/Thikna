@@ -6,16 +6,20 @@ use App\Http\Controllers\BenefitsController;
 use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\frontend\BusinessController;
+use App\Http\Controllers\frontend\ContactController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\RentalController;
 use App\Http\Controllers\frontend\ShopController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/course-catalog', [CourseController::class, 'catalog'])->name('courses.catalog');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
@@ -49,6 +53,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/profile', [DashboardController::class, 'profile'])->name('dashboard.profile');
     Route::put('/dashboard/profile', [DashboardController::class, 'updateProfile'])->name('dashboard.profile.update');
+    Route::put('/dashboard/payment-details', [DashboardController::class, 'updatePaymentDetails'])->name('dashboard.payment-details.update');
     Route::get('/dashboard/referrals', [DashboardController::class, 'referrals'])->name('dashboard.referrals');
     Route::get('/dashboard/idcard/download', [DashboardController::class, 'downloadIdCard'])->name('dashboard.idcard.download');
 
@@ -62,6 +67,7 @@ Route::middleware('auth')->group(function () {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect()->route('home');
     })->name('logout');
 
@@ -82,4 +88,3 @@ Route::middleware('auth')->group(function () {
         });
     });
 });
-

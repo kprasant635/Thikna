@@ -13,14 +13,10 @@
     {{-- Primary navigation right after search bar --}}
     <nav class="primary-nav">
       <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
-      @auth
-        <a href="{{ route('courses.index') }}" class="{{ request()->routeIs('courses.*') ? 'active' : '' }}">SKOP-X Course</a>
-      @else
-        <a href="#">SKOP-X Course</a>
-      @endauth
+      <a href="{{ route('courses.catalog') }}" class="{{ request()->routeIs('courses.*') ? 'active' : '' }}">SKOP-X Course</a>
       <a href="{{ route('register') }}">Join Now</a>
       <a href="#">Achievements</a>
-      <a href="#">Support</a>
+      <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact Us</a>
     </nav>
 
     {{-- Desktop actions --}}
@@ -62,14 +58,10 @@
 
     <nav class="sx-mobile-links">
       <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">🏠 Home</a>
-      @auth
-        <a href="{{ route('courses.index') }}" class="{{ request()->routeIs('courses.*') ? 'active' : '' }}">📚 SKOP-X Course</a>
-      @else
-        <a href="#">📚 SKOP-X Course</a>
-      @endauth
+      <a href="{{ route('courses.catalog') }}" class="{{ request()->routeIs('courses.*') ? 'active' : '' }}">📚 SKOP-X Course</a>
       <a href="{{ route('register') }}">🤝 Join Now</a>
       <a href="#">🏆 Achievements</a>
-      <a href="#">🎧 Support</a>
+      <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">📞 Contact Us</a>
     </nav>
 
     <div class="sx-mobile-actions">

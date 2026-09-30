@@ -21,12 +21,26 @@ use Illuminate\Support\Str;
     'password',
     'address',
     'profile_photo',
+    'payment_method',
+    'bank_account_holder',
+    'bank_name',
+    'bank_account_number',
+    'bank_ifsc',
+    'upi_id',
     'status',
     'learning_status',
     'referral_code',
     'referred_by_id',
 ])]
-#[Hidden(['password', 'remember_token'])]
+#[Hidden([
+    'password',
+    'remember_token',
+    'bank_account_holder',
+    'bank_name',
+    'bank_account_number',
+    'bank_ifsc',
+    'upi_id',
+])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
@@ -51,6 +65,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'phone_verified_at' => 'datetime',
             'password' => 'hashed',
+            'bank_account_number' => 'encrypted',
         ];
     }
 
@@ -155,7 +170,7 @@ class User extends Authenticatable
     public static function generateUniqueReferralCode(): string
     {
         do {
-            $code = 'THK' . strtoupper(Str::random(6));
+            $code = 'SKOPX' . strtoupper(Str::random(6));
         } while (static::where('referral_code', $code)->exists());
 
         return $code;

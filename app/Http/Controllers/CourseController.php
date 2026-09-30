@@ -22,10 +22,30 @@ class CourseController extends Controller
     {
         $user = $request->user();
         $learningData = $this->learningService->getUserCourses($user);
-        
+
         return view('pages.courses.index', array_merge([
             'user' => $user,
         ], $learningData));
+    }
+
+    public function catalog(): View
+    {
+        $courses = Course::query()
+            ->where('is_active', true)
+            ->with('activeVideos')
+            ->orderBy('title')
+            ->get();
+
+        foreach ($courses as $course) {
+            $course->setAttribute(
+                'catalog_thumbnail',
+                $course->thumbnail
+                    ? asset('storage/'.$course->thumbnail)
+                    : $this->youtubeThumbnailUrl($course->activeVideos->first()?->video_url)
+            );
+        }
+
+        return view('pages.courses.catalog', ['courses' => $courses]);
     }
 
     /**
@@ -40,7 +60,7 @@ class CourseController extends Controller
         }
 
         $learningData = $this->learningService->getUserCourses($user);
-        
+
         $courseData = $learningData['courses']->firstWhere('id', $course->id) ?? $course;
         $videos = $course->activeVideos;
 
@@ -94,10 +114,20 @@ class CourseController extends Controller
             ], 403);
         } catch (\Throwable $e) {
             report($e);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to save progress.',
             ], 500);
         }
+    }
+
+    private function youtubeThumbnailUrl(?string $videoUrl): ?string
+    {
+        if (! $videoUrl || preg_match('/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/ ]{11})/', $videoUrl, $matches) !== 1) {
+            return null;
+        }
+
+        return 'https://img.youtube.com/vi/'.$matches[1].'/hqdefault.jpg';
     }
 }
