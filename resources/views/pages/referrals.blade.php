@@ -15,44 +15,91 @@
 
     <!-- Referral Stats Overview Bar -->
     <div class="dash-stats-row" style="margin-bottom: 24px;">
-        <div class="dash-stat-card">
-            <div class="dash-stat-icon" style="background: #e0e7ff; color: #3730a3;">
-                <span style="font-size: 20px;">👥</span>
+
+        <!-- Total Referrals -->
+        <div class="dash-stat-card stat-card-blue">
+            <div class="dash-stat-icon">
+                <!-- Users / Group -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <circle cx="9" cy="8" r="3.5" fill="currentColor" />
+                    <path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5" fill="currentColor" opacity=".65" />
+                    <circle cx="17" cy="9" r="2.5" fill="currentColor" opacity=".85" />
+                    <path d="M16 14c2.8.3 5 2.7 5 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        opacity=".65" />
+                </svg>
             </div>
+
             <div class="dash-stat-info">
                 <div class="dash-stat-label">Total Referrals</div>
-                <div class="dash-stat-value" id="statTotalCount">{{ $referrals->count() }}</div>
+                <div class="dash-stat-value" id="statTotalCount">
+                    {{ $referrals->count() }}
+                </div>
             </div>
         </div>
-        <div class="dash-stat-card">
-            <div class="dash-stat-icon" style="background: #dcfce7; color: #15803d;">
-                <span style="font-size: 20px;">✓</span>
+
+
+        <!-- Active / Subscribed -->
+        <div class="dash-stat-card stat-card-green">
+            <div class="dash-stat-icon">
+                <!-- Check Circle -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" fill="currentColor" opacity=".25" />
+                    <path d="M8 12l2.5 2.5L16.5 9" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
             </div>
+
             <div class="dash-stat-info">
-                <div class="dash-stat-label">Active / Subscribed</div>
-                <div class="dash-stat-value" style="color: #15803d;">
-                    {{ $referrals->filter(fn($r) => $r->isActive())->count() }}</div>
+                <div class="dash-stat-label">Active / Subscribed / Paid</div>
+                <div class="dash-stat-value">
+                    {{ $referrals->filter(fn($r) => $r->isActive())->count() }}
+                </div>
             </div>
         </div>
-        <div class="dash-stat-card">
-            <div class="dash-stat-icon" style="background: #fff7ed; color: #c2410c;">
-                <span style="font-size: 20px;">⚡</span>
+
+
+        <!-- Pending / Unsubscribed -->
+        <div class="dash-stat-card stat-card-orange">
+            <div class="dash-stat-icon">
+                <!-- Clock / Pending -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" fill="currentColor" opacity=".25" />
+                    <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
             </div>
+
             <div class="dash-stat-info">
-                <div class="dash-stat-label">Pending / Unsubscribed</div>
-                <div class="dash-stat-value" style="color: #c2410c;">
-                    {{ $referrals->filter(fn($r) => !$r->isActive())->count() }}</div>
+                <div class="dash-stat-label">Pending / Unsubscribed / Unpaid</div>
+                <div class="dash-stat-value">
+                    {{ $referrals->filter(fn($r) => !$r->isActive())->count() }}
+                </div>
             </div>
         </div>
-        <div class="dash-stat-card">
-            <div class="dash-stat-icon" style="background: #fef3c7; color: #b45309;">
-                <span style="font-size: 20px;">🔗</span>
+
+
+        <!-- Sub-Referrals -->
+        <div class="dash-stat-card stat-card-purple">
+            <div class="dash-stat-icon">
+                <!-- Share / Network -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <circle cx="6" cy="12" r="2.5" fill="currentColor" />
+                    <circle cx="18" cy="6" r="2.5" fill="currentColor" />
+                    <circle cx="18" cy="18" r="2.5" fill="currentColor" />
+
+                    <path d="M8.2 10.8l7.6-3.6M8.2 13.2l7.6 3.6" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" />
+                </svg>
             </div>
+
             <div class="dash-stat-info">
-                <div class="dash-stat-label">Sub-Referrals Generated</div>
-                <div class="dash-stat-value">{{ $referrals->sum('referrals_count') }}</div>
+                <div class="dash-stat-label">Sub-Referrals Generated / Team Added</div>
+                <div class="dash-stat-value">
+                    {{ $referrals->sum('referrals_count') }}
+                </div>
             </div>
         </div>
+
     </div>
 
     <!-- Referral Table Card -->
@@ -149,7 +196,8 @@
             @else
                 <div class="dash-empty-state" style="padding: 40px 20px; text-align: center;">
                     <div class="dash-empty-icon" style="font-size: 40px; margin-bottom: 12px;">🤝</div>
-                    <h4 style="font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">No Referrals Yet</h4>
+                    <h4 style="font-size: 17px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">No Referrals Yet
+                    </h4>
                     <p style="font-size: 14px; color: #64748b; margin-bottom: 18px;">Share your unique referral code
                         <strong>{{ Auth::user()->referral_code }}</strong> with friends to invite them!
                     </p>

@@ -1,0 +1,243 @@
+.dash-stat-card {
+    position: relative;
+    overflow: hidden;
+    border: none;
+    color: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transition: all 0.25s ease;
+}
+
+.dash-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.14);
+}
+
+/* Blue */
+.stat-card-blue {
+    background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+}
+
+/* Green */
+.stat-card-green {
+    background: linear-gradient(135deg, #059669 0%, #16a34a 100%);
+}
+
+/* Orange */
+.stat-card-orange {
+    background: linear-gradient(135deg, #ea580c 0%, #f59e0b 100%);
+}
+
+/* Purple */
+.stat-card-purple {
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+}
+
+/* Icons */
+.dash-stat-card .dash-stat-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    margin-bottom: 14px;
+
+    background: rgba(255, 255, 255, 0.18) !important;
+    color: #fff !important;
+
+    backdrop-filter: blur(6px);
+}
+
+.dash-stat-card .dash-stat-label {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.dash-stat-card .dash-stat-value {
+    color: #fff !important;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+
+/* Green - Account Status */
+.stat-card-green {
+    background: linear-gradient(135deg, #059669 0%, #16a34a 100%);
+}
+
+/* Gold - My Listings */
+.stat-card-gold {
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+}
+
+/* Purple - Referral Code */
+.stat-card-purple {
+    background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+}
+
+/* Red - Total Referrals */
+.stat-card-red {
+    background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+}
+
+/* Common card styling */
+.dash-stat-card {
+    position: relative;
+    overflow: hidden;
+    border: none;
+    border-radius: 16px;
+    padding: 20px;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transition: all 0.25s ease;
+}
+
+.dash-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.14);
+}
+
+/* Icon */
+.dash-stat-card .dash-stat-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    margin-bottom: 14px;
+
+    background: rgba(255, 255, 255, 0.18) !important;
+    color: #fff !important;
+
+    backdrop-filter: blur(6px);
+}
+
+/* Label */
+.dash-stat-card .dash-stat-label {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+/* Value */
+.dash-stat-card .dash-stat-value {
+    color: #fff !important;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.stat-card-orange {
+    background: linear-gradient(135deg, #ea580c 0%, #f59e0b 100%);
+}
+
+.product-card {
+    position: relative;
+    overflow: hidden;
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    min-height: 180px;
+
+    border-radius: 12px;
+    border: 1px solid #dbe3ef;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* Dark/white overlay so text remains readable */
+.product-overlay {
+    position: absolute;
+    inset: 0;
+
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.05) 20%,
+        rgba(0, 0, 0, 0.65) 100%
+    );
+
+    transition: background 0.2s ease;
+}
+
+.product-content {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+
+    z-index: 2;
+
+    color: #fff;
+}
+
+.product-icon {
+    font-size: 22px;
+    margin-bottom: 6px;
+}
+
+.product-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.product-category {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.85);
+    margin-top: 3px;
+}
+
+.check-icon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+
+    z-index: 3;
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.9);
+    color: #2563eb;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    opacity: 0;
+}
+
+.product-card.selected .check-icon {
+    opacity: 1;
+}
+
+.product-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.product-card:hover .product-overlay {
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.05),
+        rgba(0, 0, 0, 0.75)
+    );
+}

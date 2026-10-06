@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Subscription;
 use App\Models\SubscriptionPayment;
 use App\Services\SubscriptionPaymentService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,7 +22,40 @@ class SubscriptionController extends Controller
     /**
      * Show the subscription product selection and payment page.
      */
-    public function show(Request $request): View|RedirectResponse
+    // public function show(Request $request): View|RedirectResponse
+    // {
+    //     $user = $request->user();
+
+    //     // If user is already active, redirect to dashboard
+    //     if ($user && $user->isActive()) {
+    //         return redirect()->route('dashboard');
+    //     }
+
+    //     $products = Product::where('is_active', true)->get();
+
+    //     $pendingSubscription = $user->subscriptions()
+    //         ->with(['products', 'latestPayment'])
+    //         ->where('status', Subscription::STATUS_PENDING)
+    //         ->latest()
+    //         ->first();
+
+    //     $selectedProductIds = $pendingSubscription ? $pendingSubscription->products->pluck('id')->toArray() : [];
+    //     $latestPayment = $pendingSubscription?->latestPayment;
+
+    //     $pricing = SubscriptionPaymentService::getPricingBreakdown();
+
+    //     return view('pages.subscription', [
+    //         'user' => $user,
+    //         'products' => $products,
+    //         'selectedProductIds' => $selectedProductIds,
+    //         'pendingSubscription' => $pendingSubscription,
+    //         'latestPayment' => $latestPayment,
+    //         'pricing' => $pricing,
+    //         'subscriptionAmount' => $pricing['total_payable'],
+    //     ]);
+    // }
+
+    public function show(Request $request)
     {
         $user = $request->user();
 
@@ -30,7 +64,9 @@ class SubscriptionController extends Controller
             return redirect()->route('dashboard');
         }
 
-        $products = Product::where('is_active', true)->get();
+        $products = Product::with('course')
+            ->where('is_active', true)
+            ->get();
 
         $pendingSubscription = $user->subscriptions()
             ->with(['products', 'latestPayment'])
@@ -38,7 +74,10 @@ class SubscriptionController extends Controller
             ->latest()
             ->first();
 
-        $selectedProductIds = $pendingSubscription ? $pendingSubscription->products->pluck('id')->toArray() : [];
+        $selectedProductIds = $pendingSubscription
+            ? $pendingSubscription->products->pluck('id')->toArray()
+            : [];
+
         $latestPayment = $pendingSubscription?->latestPayment;
 
         $pricing = SubscriptionPaymentService::getPricingBreakdown();
@@ -69,6 +108,7 @@ class SubscriptionController extends Controller
                     'redirect_url' => route('dashboard'),
                 ]);
             }
+
             return redirect()->route('dashboard');
         }
 
@@ -156,6 +196,7 @@ class SubscriptionController extends Controller
                     'message' => 'Payment reference not found.',
                 ], 444);
             }
+
             return redirect()->route('subscription.show')->withErrors(['payment' => 'Invalid payment reference.']);
         }
 
@@ -225,13 +266,13 @@ class SubscriptionController extends Controller
         $subscription = $payment->subscription ? $payment->subscription->load('products') : null;
         $pricing = SubscriptionPaymentService::getPricingBreakdown();
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.subscription_receipt', [
+        $pdf = Pdf::loadView('pdf.subscription_receipt', [
             'payment' => $payment,
             'subscription' => $subscription,
             'user' => $user,
             'pricing' => $pricing,
         ]);
 
-        return $pdf->download('SkopX_Subscription_Receipt_' . $payment->order_reference . '.pdf');
+        return $pdf->download('SkopX_Subscription_Receipt_'.$payment->order_reference.'.pdf');
     }
 }

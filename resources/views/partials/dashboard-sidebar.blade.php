@@ -42,6 +42,10 @@
                 <span class="sidebar-icon">🏆</span>
                 My Certificate
             </a>
+            <a href="{{ route('business.pdf.download') }}" class="sidebar-link">
+                <span class="sidebar-icon">📄</span>
+                Business PDF
+            </a>
             <a href="{{ route('benefits.index') }}"
                 class="sidebar-link {{ request()->routeIs('benefits.*') ? 'active' : '' }}">
                 <span class="sidebar-icon">🌟</span>

@@ -5,12 +5,14 @@ namespace App\Http\Controllers\frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
+        $search = trim((string) $request->query('q', ''));
         $categories = [
             ['icon' => '📊', 'title' => 'Digital Skills', 'color' => '#2563eb'],
             ['icon' => '📈', 'title' => 'Business Growth', 'color' => '#dc2626'],
@@ -25,7 +27,13 @@ class HomeController extends Controller
             ->orderBy('title')
             ->get(['id', 'title', 'description']);
 
-        $recentJoinings = User::query()
+        $recentJoiningsQuery = User::query();
+
+        if ($search !== '') {
+            $recentJoiningsQuery->where('name', 'like', '%'.$search.'%');
+        }
+
+        $recentJoinings = $recentJoiningsQuery
             ->latest()
             ->limit(5)
             ->get(['id', 'name', 'address', 'referral_code', 'created_at', 'profile_photo'])
@@ -66,6 +74,17 @@ class HomeController extends Controller
             ['names' => 'Amit & Neha', 'message' => 'Wishing you endless love!', 'date' => '17 Sep', 'avatars' => ['AN', 'NE']],
             ['names' => 'Manoj & Pooja', 'message' => 'Happy Anniversary!', 'date' => '18 Sep', 'avatars' => ['MP', 'PO']],
         ];
+
+        if ($search !== '') {
+            $matchesSearch = fn (array $item): bool => str_contains(
+                mb_strtolower($item['name'] ?? $item['names']),
+                mb_strtolower($search),
+            );
+
+            $topAchievers = array_values(array_filter($topAchievers, $matchesSearch));
+            $birthdays = array_values(array_filter($birthdays, $matchesSearch));
+            $anniversaries = array_values(array_filter($anniversaries, $matchesSearch));
+        }
 
         return view('pages.home', [
             'categories' => $categories,

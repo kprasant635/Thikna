@@ -17,6 +17,7 @@ class Course extends Model
         'slug',
         'description',
         'thumbnail',
+        'img_url',
         'is_active',
     ];
 

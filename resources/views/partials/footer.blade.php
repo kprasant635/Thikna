@@ -32,7 +32,7 @@
         <h4 style="color:#fff;font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;margin-bottom:16px;">Quick Links</h4>
         <a href="{{ route('home') }}" style="color:rgba(255,255,255,0.6);font-family:'Poppins',sans-serif;">Home</a>
         <a href="#" style="color:rgba(255,255,255,0.6);font-family:'Poppins',sans-serif;">SKOP-X Course</a>
-        <a href="#" style="color:rgba(255,255,255,0.6);font-family:'Poppins',sans-serif;">Achievers</a>
+        {{-- <a href="#" style="color:rgba(255,255,255,0.6);font-family:'Poppins',sans-serif;">Achievers</a> --}}
         <a href="{{ route('register') }}" style="color:rgba(255,255,255,0.6);font-family:'Poppins',sans-serif;">Join Now</a>
         <a href="{{ route('contact') }}" style="color:rgba(255,255,255,0.6);font-family:'Poppins',sans-serif;">Contact Us</a>
       </div>
@@ -49,8 +49,9 @@
       {{-- Community --}}
       <div style="text-align:center;">
         <h4 style="color:#fff;font-family:'Poppins',sans-serif;font-size:14px;font-weight:700;margin-bottom:16px;">Join Our Community</h4>
-        <div style="width:100px;height:100px;background:#fff;border-radius:8px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#333;padding:8px;text-align:center;font-weight:600;">
-          QR Code
+        @php($companyContactQr = urlencode("BEGIN:VCARD\r\nVERSION:3.0\r\nFN:SKOP-X\r\nORG:SKOP-X\r\nEMAIL:support@skop-x.in\r\nTEL:+919876543210\r\nEND:VCARD"))
+        <div style="width:140px;height:140px;background:#fff;border-radius:8px;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;padding:8px;">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&amp;qzone=4&amp;ecc=M&amp;data={{ $companyContactQr }}" alt="QR code with SKOP-X company contact details" width="124" height="124" loading="eager">
         </div>
         <div style="font-size:12px;color:rgba(255,255,255,0.6);font-family:'Poppins',sans-serif;">Scan & Connect</div>
       </div>

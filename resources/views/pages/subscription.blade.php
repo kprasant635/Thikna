@@ -461,7 +461,7 @@
 
         <!-- Welcome Hero Banner -->
         <div class="sub-hero">
-            <h1>Welcome to SKOP-X! 🎉</h1>
+            <h1 style="color:#e2e8f0">Welcome to SKOP-X! 🎉</h1>
             <p>Your account has been created successfully.</p>
             <p class="sub-hero-note">Choose at least 1 course below and complete the
                 {{ $pricing['formatted']['total_payable'] }} payment to activate your account
@@ -520,23 +520,47 @@
 
 
             <!-- 16 Subscription Products Grid -->
-            <div class="products-grid">
-                @foreach ($products as $product)
-                    @php
-                        $isSelected = in_array($product->id, $selectedProductIds);
-                    @endphp
-                    <div class="product-card {{ $isSelected ? 'selected' : '' }}" data-id="{{ $product->id }}">
-                        <input type="checkbox" name="products[]" value="{{ $product->id }}" id="prod_{{ $product->id }}"
-                            {{ $isSelected ? 'checked' : '' }} style="display: none;" />
-                        <div class="check-icon">✓</div>
-                        <div class="product-icon">{{ $product->icon }}</div>
-                        <div>
-                            <div class="product-name">{{ $product->name }}</div>
-                            <div class="product-category">{{ $product->category }}</div>
-                        </div>
-                    </div>
-                @endforeach
+       <div class="products-grid">
+    @foreach ($products as $product)
+        @php
+            $isSelected = in_array($product->id, $selectedProductIds);
+        @endphp
+
+        <div class="product-card {{ $isSelected ? 'selected' : '' }}"
+            data-id="{{ $product->id }}"
+            @if ($product->course?->img_url)
+                style="background-image: url('{{ asset($product->course->img_url) }}');"
+            @endif
+        >
+
+            <input type="checkbox"
+                name="products[]"
+                value="{{ $product->id }}"
+                id="prod_{{ $product->id }}"
+                {{ $isSelected ? 'checked' : '' }}
+                style="display: none;" />
+
+            <div class="product-overlay"></div>
+
+            <div class="check-icon">✓</div>
+
+            <div class="product-content">
+                <div class="product-icon">
+                    {{ $product->icon }}
+                </div>
+
+                <div class="product-name">
+                    {{ $product->name }}
+                </div>
+
+                <div class="product-category">
+                    {{ $product->category }}
+                </div>
             </div>
+
+        </div>
+    @endforeach
+</div>
 
         </form>
     </div>

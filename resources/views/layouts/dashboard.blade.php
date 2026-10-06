@@ -13,6 +13,7 @@
     <link rel="shortcut icon" href="{{ asset('images/skopx-logo.png') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <script src="{{ asset('js/theme.js') }}"></script>
     @stack('styles')
 </head>

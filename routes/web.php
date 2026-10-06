@@ -56,6 +56,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/dashboard/payment-details', [DashboardController::class, 'updatePaymentDetails'])->name('dashboard.payment-details.update');
     Route::get('/dashboard/referrals', [DashboardController::class, 'referrals'])->name('dashboard.referrals');
     Route::get('/dashboard/idcard/download', [DashboardController::class, 'downloadIdCard'])->name('dashboard.idcard.download');
+    Route::get('/business-pdf/download', [DashboardController::class, 'downloadPdf'])
+        ->name('business.pdf.download');
 
     // Subscription & Course Purchase
     Route::get('/subscription', [SubscriptionController::class, 'show'])->name('subscription.show');

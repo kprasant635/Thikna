@@ -145,4 +145,11 @@ class DashboardController extends Controller
         return $pdf->setPaper('a5', 'portrait')
             ->download('SkopX_Virtual_ID_Card_'.($user->referral_code ?? $user->id).'.pdf');
     }
+
+    public function downloadPdf()
+    {
+        $file = public_path('pdf/business.pdf');
+
+        return response()->download($file, 'Business.pdf');
+    }
 }

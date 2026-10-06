@@ -152,65 +152,153 @@
     </div>
 
     {{-- Quick Stats Row --}}
-    <div class="dash-stats-row">
-        <div class="dash-stat-card">
-            <div class="dash-stat-icon"
-                style="background: {{ Auth::user()->isActive() ? '#dcfce7' : '#fff7ed' }}; color: {{ Auth::user()->isActive() ? '#15803d' : '#c2410c' }};">
-                <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
-                    <circle cx="10" cy="7" r="4" fill="currentColor" />
-                    <path d="M3 18c0-3.866 3.134-7 7-7s7 3.134 7 7" fill="currentColor" opacity=".4" />
-                </svg>
-            </div>
-            <div class="dash-stat-info">
-                <div class="dash-stat-label">Account Status</div>
-                <div class="dash-stat-value"
-                    style="color: {{ Auth::user()->isActive() ? '#15803d' : '#c2410c' }}; font-size: 15px;">
-                    {{ Auth::user()->isActive() ? '✓ Active' : 'Pending (Needs 1 Course)' }}
-                </div>
-                @if (Auth::user()->isActive())
-                    <a href="{{ route('subscription.receipt.download') }}"
-                        style="display: inline-block; font-size: 12px; font-weight: 600; color: #15803d; text-decoration: underline; margin-top: 4px;">
-                        📥 Download Receipt (PDF)
-                    </a>
-                @endif
-            </div>
+  <div class="dash-stats-row">
+
+   <!-- Account Status -->
+<div class="dash-stat-card {{ Auth::user()->isActive() ? 'stat-card-green' : 'stat-card-orange' }}">
+    <div class="dash-stat-icon">
+        <!-- User + Check -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <circle cx="9" cy="8" r="4" fill="currentColor" />
+            <path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round" />
+            <path d="M15 17l2 2 4-4"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+        </svg>
+    </div>
+
+    <div class="dash-stat-info">
+        <div class="dash-stat-label">Account Status</div>
+
+        <div class="dash-stat-value" style="font-size: 15px;">
+            {{ Auth::user()->isActive() ? '✓ Active' : 'Pending (Needs 1 Course)' }}
         </div>
-        <div class="dash-stat-card">
-            <div class="dash-stat-icon" style="background: var(--gold-tint); color: var(--gold);">
-                <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
-                    <rect x="3" y="6" width="14" height="11" rx="2" fill="currentColor" opacity=".5" />
-                    <path d="M7 6V4a3 3 0 016 0v2" stroke="currentColor" stroke-width="1.5" fill="none" />
-                </svg>
-            </div>
-            <div class="dash-stat-info">
-                <div class="dash-stat-label">My Listings</div>
-                <div class="dash-stat-value">0</div>
-            </div>
-        </div>
-        <div class="dash-stat-card">
-            <div class="dash-stat-icon" style="background: #EDE9FE; color: #7C3AED;">
-                <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
-                    <path d="M10 3l2.09 4.26L17 8.27l-3.5 3.41.83 4.82L10 14.27l-4.33 2.23.83-4.82L3 8.27l4.91-1.01L10 3z"
-                        fill="currentColor" />
-                </svg>
-            </div>
-            <div class="dash-stat-info">
-                <div class="dash-stat-label">Your Referral Code</div>
-                <div class="dash-stat-value dash-referral-code">{{ Auth::user()->referral_code ?? '—' }}</div>
-            </div>
-        </div>
-        <div class="dash-stat-card">
-            <div class="dash-stat-icon" style="background: #FEE2E2; color: #DC2626;">
-                <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
-                    <path d="M10 18s-7-5.75-7-10.25C3 4.01 6.13 2 10 2s7 2.01 7 5.75S10 18 10 18z" fill="currentColor" />
-                </svg>
-            </div>
-            <div class="dash-stat-info">
-                <div class="dash-stat-label">Total Referrals</div>
-                <div class="dash-stat-value">{{ Auth::user()->referrals()->count() }}</div>
-            </div>
+
+        @if (Auth::user()->isActive())
+            <a href="{{ route('subscription.receipt.download') }}"
+                style="
+                    display: inline-block;
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: #fff;
+                    text-decoration: underline;
+                    margin-top: 4px;
+                ">
+                📥 Download Receipt (PDF)
+            </a>
+        @endif
+    </div>
+</div>
+
+
+<!-- My Listings -->
+<div class="dash-stat-card stat-card-gold">
+    <div class="dash-stat-icon">
+        <!-- Store / Building -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M4 10v10h16V10"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linejoin="round" />
+
+            <path d="M3 10l2-6h14l2 6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linejoin="round" />
+
+            <path d="M3 10c.5 1.5 1.7 2 3 2s2.5-.5 3-2
+                     c.5 1.5 1.7 2 3 2s2.5-.5 3-2
+                     c.5 1.5 1.7 2 3 2s2.5-.5 3-2"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+
+            <path d="M9 20v-5h6v5"
+                stroke="currentColor"
+                stroke-width="2" />
+        </svg>
+    </div>
+
+    <div class="dash-stat-info">
+        <div class="dash-stat-label">My Listings</div>
+        <div class="dash-stat-value">0</div>
+    </div>
+</div>
+
+
+<!-- Referral Code -->
+<div class="dash-stat-card stat-card-purple">
+    <div class="dash-stat-icon">
+        <!-- Link -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M10 13a5 5 0 007.54.54l2-2a5 5 0 00-7.07-7.07l-1.15 1.15"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+
+            <path d="M14 11a5 5 0 00-7.54-.54l-2 2a5 5 0 007.07 7.07l1.15-1.15"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round" />
+        </svg>
+    </div>
+
+    <div class="dash-stat-info">
+        <div class="dash-stat-label">Your Referral Code</div>
+
+        <div class="dash-stat-value dash-referral-code">
+            {{ Auth::user()->referral_code ?? '—' }}
         </div>
     </div>
+</div>
+
+
+<!-- Total Referrals -->
+<div class="dash-stat-card stat-card-red">
+    <div class="dash-stat-icon">
+        <!-- Users / Group -->
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+
+            <!-- Main user -->
+            <circle cx="9" cy="8" r="3.5"
+                fill="currentColor" />
+
+            <path d="M2.5 20c0-3.6 2.9-6.5 6.5-6.5
+                     s6.5 2.9 6.5 6.5"
+                fill="currentColor"
+                opacity=".65" />
+
+            <!-- Second user -->
+            <circle cx="17" cy="9" r="2.5"
+                fill="currentColor"
+                opacity=".8" />
+
+            <path d="M16 14c2.8.3 5 2.7 5 5.5"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                opacity=".65" />
+        </svg>
+    </div>
+
+    <div class="dash-stat-info">
+        <div class="dash-stat-label">Total Referrals</div>
+
+        <div class="dash-stat-value">
+            {{ Auth::user()->referrals()->count() }}
+        </div>
+    </div>
+</div>
+
+</div>
 
     {{-- Dedicated Referral Sharing Card --}}
     <div class="dash-card"
