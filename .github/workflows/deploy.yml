@@ -117,6 +117,19 @@ jobs:
           rm -f /tmp/skopx-deploy.tar.gz
 
           echo "======================================"
+          echo "Creating Laravel storage symlink..."
+          echo "======================================"
+
+          if [ -e public/storage ] || [ -L public/storage ]; then
+              rm -rf public/storage
+          fi
+
+          ln -s "$(pwd)/storage/app/public" "$(pwd)/public/storage"
+
+          echo "Storage symlink:"
+          ls -ld public/storage
+
+          echo "======================================"
           echo "Clearing Laravel cache..."
           echo "======================================"
 
