@@ -32,76 +32,84 @@
                 <a class="post-btn sx-signup-btn" href="{{ route('register') }}">Sign Up</a>
             @endguest
             @auth
-                <a href="{{ route('dashboard') }}" class="btn btn-outline sx-login-btn">Dashboard</a>
+                @if (auth()->user()->isAdmin())
+                    <a href="{{ route('admin.dashboard') }}" class="btn btn-outline sx-login-btn">Dashboard</a>
+                @else
+                    <a href="{{ route('dashboard') }}" class="btn btn-outline sx-login-btn">Dashboard</a>
+                @endif
                 <a href="{{ route('dashboard') }}" class="avatar" title="{{ Auth::user()->name }}"
                     style="background:#2563eb;">{{ Auth::user()->initials() }}</a>
-                @endif
+            @endauth
 
-            </div>
-
-            {{-- Mobile hamburger --}}
-            <button class="sx-hamburger" id="sx-hamburger" onclick="toggleMobileMenu()" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
         </div>
 
-        {{-- Mobile nav overlay --}}
-        <div class="sx-mobile-nav" id="sx-mobile-nav">
-            <div class="sx-mobile-nav-header">
-                <div style="display:flex;align-items:center;gap:8px;">
-                    <img src="{{ asset('images/skopx-logo.png') }}" alt="SKOP-X Logo"
-                        style="height: 36px; width: auto; object-fit: contain;">
-                </div>
-                <button class="sx-mobile-close" onclick="toggleMobileMenu()" aria-label="Close menu">✕</button>
+        {{-- Mobile hamburger --}}
+        <button class="sx-hamburger" id="sx-hamburger" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </div>
+
+    {{-- Mobile nav overlay --}}
+    <div class="sx-mobile-nav" id="sx-mobile-nav">
+        <div class="sx-mobile-nav-header">
+            <div style="display:flex;align-items:center;gap:8px;">
+                <img src="{{ asset('images/skopx-logo.png') }}" alt="SKOP-X Logo"
+                    style="height: 36px; width: auto; object-fit: contain;">
             </div>
+            <button class="sx-mobile-close" onclick="toggleMobileMenu()" aria-label="Close menu">✕</button>
+        </div>
 
-            {{-- Mobile search --}}
-            <form class="sx-mobile-search" action="{{ route('home') }}" method="get">
-                <input type="text" name="q" value="{{ request('q') }}" placeholder="Search by Name" />
-                <button type="submit">🔍</button>
-            </form>
+        {{-- Mobile search --}}
+        <form class="sx-mobile-search" action="{{ route('home') }}" method="get">
+            <input type="text" name="q" value="{{ request('q') }}" placeholder="Search by Name" />
+            <button type="submit">🔍</button>
+        </form>
 
-            <nav class="sx-mobile-links">
-                <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">🏠 Home</a>
-                <a href="{{ route('courses.catalog') }}" class="{{ request()->routeIs('courses.*') ? 'active' : '' }}">📚
-                    SKOP-X Course</a>
-                <a href="{{ route('register') }}">🤝 Join Now</a>
-                <a href="#">🏆 Achievements</a>
-                <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">📞 Contact
-                    Us</a>
-            </nav>
+        <nav class="sx-mobile-links">
+            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">🏠 Home</a>
+            <a href="{{ route('courses.catalog') }}" class="{{ request()->routeIs('courses.*') ? 'active' : '' }}">📚
+                SKOP-X Course</a>
+            <a href="{{ route('register') }}">🤝 Join Now</a>
+            <a href="#">🏆 Achievements</a>
+            <a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">📞 Contact
+                Us</a>
+        </nav>
 
-            <div class="sx-mobile-actions">
-                @guest
-                    <a href="{{ route('login') }}" class="sx-mobile-login">Login</a>
-                    <a href="{{ route('register') }}" class="sx-mobile-signup">Sign Up</a>
-                @endguest
-                @auth
+        <div class="sx-mobile-actions">
+            @guest
+                <a href="{{ route('login') }}" class="sx-mobile-login">Login</a>
+                <a href="{{ route('register') }}" class="sx-mobile-signup">Sign Up</a>
+            @endguest
+            @auth
+                @if (auth()->user()->isAdmin())
+                    <a href="{{ route('admin.dashboard') }}" class="sx-mobile-login">Dashboard</a>
+                @else
                     <a href="{{ route('dashboard') }}" class="sx-mobile-login">Dashboard</a>
-                    <form method="POST" action="{{ route('logout') }}" style="flex:1;">
-                        @csrf
-                        <button type="submit" class="sx-mobile-signup" style="width:100%;cursor:pointer;">Logout</button>
-                    </form>
-                @endauth
-            </div>
+                @endif
+                <form method="POST" action="{{ route('logout') }}" style="flex:1;">
+                    @csrf
+                    <button type="submit" class="sx-mobile-signup" style="width:100%;cursor:pointer;">Logout</button>
+                </form>
+            @endauth
         </div>
-        <div class="sx-mobile-overlay" id="sx-mobile-overlay" onclick="toggleMobileMenu()"></div>
-    </header>
+    </div>
+    <div class="sx-mobile-overlay" id="sx-mobile-overlay" onclick="toggleMobileMenu()"></div>
+</header>
 
-    @push('scripts')
-        <script>
-            function toggleMobileMenu() {
-                const nav = document.getElementById('sx-mobile-nav');
-                const overlay = document.getElementById('sx-mobile-overlay');
-                const hamburger = document.getElementById('sx-hamburger');
-                const isOpen = nav.classList.contains('open');
+@push('scripts')
+    <script>
+        function toggleMobileMenu() {
+            const nav = document.getElementById('sx-mobile-nav');
+            const overlay = document.getElementById('sx-mobile-overlay');
+            const hamburger = document.getElementById('sx-hamburger');
+            const isOpen = nav.classList.contains('open');
 
-                nav.classList.toggle('open');
-                overlay.classList.toggle('open');
-                hamburger.classList.toggle('open');
-                document.body.style.overflow = isOpen ? '' : 'hidden';
-            }
-        </script>
-    @endpush
+            nav.classList.toggle('open');
+            overlay.classList.toggle('open');
+            hamburger.classList.toggle('open');
+            document.body.style.overflow = isOpen ? '' : 'hidden';
+        }
+    </script>
+@endpush
