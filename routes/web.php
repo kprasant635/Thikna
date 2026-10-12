@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminReferralController;
+use App\Http\Controllers\Admin\AdminSliderController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BenefitsController;
@@ -88,5 +92,30 @@ Route::middleware('auth')->group(function () {
         Route::middleware('certified')->group(function () {
             Route::get('/benefits', [BenefitsController::class, 'index'])->name('benefits.index');
         });
+    });
+});
+
+// Administrator Portal Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', function () {
+        return redirect()->route('admin.dashboard');
+    });
+
+    Route::get('/login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AdminAuthController::class, 'login'])->name('login.submit');
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
+
+    Route::middleware('admin')->group(function () {
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/referrals', [AdminReferralController::class, 'index'])->name('referrals');
+
+        // Landing Page Sliders Settings
+        Route::get('/sliders', [AdminSliderController::class, 'index'])->name('sliders.index');
+        Route::get('/sliders/create', [AdminSliderController::class, 'create'])->name('sliders.create');
+        Route::post('/sliders', [AdminSliderController::class, 'store'])->name('sliders.store');
+        Route::get('/sliders/{slider}/edit', [AdminSliderController::class, 'edit'])->name('sliders.edit');
+        Route::put('/sliders/{slider}', [AdminSliderController::class, 'update'])->name('sliders.update');
+        Route::delete('/sliders/{slider}', [AdminSliderController::class, 'destroy'])->name('sliders.destroy');
+        Route::patch('/sliders/{slider}/toggle', [AdminSliderController::class, 'toggle'])->name('sliders.toggle');
     });
 });

@@ -2,12 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Models\Product;
 use App\Models\Subscription;
 use App\Models\SubscriptionPayment;
 use App\Models\User;
 use Database\Seeders\ProductSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class SubscriptionTest extends TestCase
@@ -48,8 +49,8 @@ class SubscriptionTest extends TestCase
         $response = $this->actingAs($user)->get(route('dashboard'));
 
         $response->assertOk()
-            ->assertSee('https://www.facebook.com/sharer/sharer.php?u=' . urlencode(route('register', ['ref' => 'SKOPX12345'])), false)
-            ->assertSee('https://wa.me/?text=' . urlencode('Join SKOP-X using my referral link: ' . route('register', ['ref' => 'SKOPX12345'])), false)
+            ->assertSee('https://www.facebook.com/sharer/sharer.php?u='.urlencode(route('register', ['ref' => 'SKOPX12345'])), false)
+            ->assertSee('https://wa.me/?text='.urlencode("SKOP-X — Skill Today, Better Tomorrow\nJoin SKOP-X using my referral link: ".route('register', ['ref' => 'SKOPX12345'])), false)
             ->assertSee('shareReferralOnInstagram()', false)
             ->assertSee('Facebook')
             ->assertSee('WhatsApp')
@@ -186,7 +187,7 @@ class SubscriptionTest extends TestCase
         $response->assertStatus(200);
         $response->assertJson([
             'success' => true,
-            'redirect_url' => route('dashboard'),
+            'redirect_url' => route('courses.index'),
         ]);
 
         $this->assertDatabaseHas('users', [
@@ -388,7 +389,7 @@ class SubscriptionTest extends TestCase
 
     public function test_user_can_upload_profile_photo_and_download_id_card(): void
     {
-        \Illuminate\Support\Facades\Storage::fake('public');
+        Storage::fake('public');
 
         $user = User::create([
             'name' => 'Profile User',
@@ -398,7 +399,7 @@ class SubscriptionTest extends TestCase
             'referral_code' => 'THK123456',
         ]);
 
-        $file = \Illuminate\Http\UploadedFile::fake()->image('avatar.jpg', 300, 300);
+        $file = UploadedFile::fake()->image('avatar.jpg', 300, 300);
 
         $response = $this->actingAs($user)->put(route('dashboard.profile.update'), [
             'name' => 'Profile User Updated',
@@ -410,7 +411,7 @@ class SubscriptionTest extends TestCase
 
         $user->refresh();
         $this->assertNotNull($user->profile_photo);
-        \Illuminate\Support\Facades\Storage::disk('public')->assertExists($user->profile_photo);
+        Storage::disk('public')->assertExists($user->profile_photo);
 
         $downloadResponse = $this->actingAs($user)->get(route('dashboard.idcard.download'));
         $downloadResponse->assertStatus(200);

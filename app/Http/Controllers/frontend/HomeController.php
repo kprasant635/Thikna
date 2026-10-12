@@ -4,6 +4,7 @@ namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\LandingSlider;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -21,6 +22,12 @@ class HomeController extends Controller
             ['icon' => '👥', 'title' => 'Community', 'color' => '#7c3aed'],
             ['icon' => '🎧', 'title' => 'Support 24x7', 'color' => '#0891b2'],
         ];
+
+        $sliders = LandingSlider::query()
+            ->where('is_active', true)
+            ->orderBy('order')
+            ->orderBy('id')
+            ->get();
 
         $courses = Course::query()
             ->where('is_active', true)
@@ -87,6 +94,7 @@ class HomeController extends Controller
         }
 
         return view('pages.home', [
+            'sliders' => $sliders,
             'categories' => $categories,
             'courses' => $courses,
             'recentJoinings' => $recentJoinings,

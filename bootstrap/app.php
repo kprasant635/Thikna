@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Middleware\EnsureAdminUser;
+use App\Http\Middleware\EnsureUserIsActive;
+use App\Http\Middleware\EnsureUserIsCertified;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,8 +18,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->redirectGuestsTo('/register');
         $middleware->alias([
-            'active' => \App\Http\Middleware\EnsureUserIsActive::class,
-            'certified' => \App\Http\Middleware\EnsureUserIsCertified::class,
+            'admin' => EnsureAdminUser::class,
+            'active' => EnsureUserIsActive::class,
+            'certified' => EnsureUserIsCertified::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

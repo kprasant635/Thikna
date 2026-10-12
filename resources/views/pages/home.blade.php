@@ -13,19 +13,45 @@
         <section class="sx-hero">
             <div class="sx-container">
                 <div class="sx-hero-inner">
-                    <div class="sx-course-carousel" data-course-carousel role="region" aria-roledescription="carousel" aria-label="Courses">
-                        @forelse ($courses as $course)
+                    @php
+                        $heroSlides = isset($sliders) && $sliders->isNotEmpty() ? $sliders : $courses ?? collect();
+                    @endphp
+                    <div class="sx-course-carousel" data-course-carousel role="region" aria-roledescription="carousel"
+                        aria-label="Featured Highlights">
+                        @forelse ($heroSlides as $slide)
+                            @php
+                                $isCustomSlider = $slide instanceof \App\Models\LandingSlider;
+                                $eyebrow = $isCustomSlider
+                                    ? ($slide->eyebrow ?:
+                                    'SKOP-X HIGHLIGHT ' . str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT))
+                                    : 'SKOP-X COURSE ' . str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT);
+                                $title = $slide->title;
+                                $desc =
+                                    $slide->description ?:
+                                    'Build practical skills and take your next step with SKOP-X.';
+                                $btnUrl = $isCustomSlider
+                                    ? ($slide->button_url ?:
+                                    route('register'))
+                                    : route('register');
+                                $btnText = $isCustomSlider ? ($slide->button_text ?: 'Join Now') : 'Join Now';
+                                $imgSrc = $isCustomSlider
+                                    ? $slide->imageUrl()
+                                    : asset('images/hero-female-learner.jpg');
+                            @endphp
                             <article class="sx-course-slide" role="group" aria-roledescription="slide"
-                                aria-label="Course {{ $loop->iteration }} of {{ $loop->count }}" @if (!$loop->first) hidden @endif>
+                                aria-label="Slide {{ $loop->iteration }} of {{ $loop->count }}"
+                                @if (!$loop->first) hidden @endif>
                                 <div class="sx-course-copy">
-                                    <div class="sx-course-eyebrow">SKOP-X COURSE {{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }}</div>
-                                    <h1>{{ $course->title }}</h1>
-                                    <p class="sx-course-description">{{ $course->description ?: 'Build practical skills and take your next step with SKOP-X.' }}</p>
-                                    <a href="{{ route('register') }}" class="sx-btn-yellow">Join Now <span aria-hidden="true">→</span></a>
+                                    <div class="sx-course-eyebrow">{{ $eyebrow }}</div>
+                                    <h1>{!! nl2br(e($title)) !!}</h1>
+                                    <p class="sx-course-description">{{ $desc }}</p>
+                                    <a href="{{ $btnUrl }}" class="sx-btn-yellow">{{ $btnText }} <span
+                                            aria-hidden="true">→</span></a>
                                 </div>
 
                                 <div class="sx-hero-img">
-                                    <img src="{{ asset('images/hero-female-learner.jpg') }}" alt="Learner studying {{ $course->title }}" @if ($loop->first) loading="eager" @else loading="lazy" @endif>
+                                    <img src="{{ $imgSrc }}" alt="{{ $title }}"
+                                        @if ($loop->first) loading="eager" @else loading="lazy" @endif>
                                 </div>
                             </article>
                         @empty
@@ -33,22 +59,27 @@
                                 <div class="sx-course-copy">
                                     <div class="sx-course-eyebrow">SKOP-X LEARNING</div>
                                     <h1>Skill Today<br>Better Tomorrow</h1>
-                                    <p class="sx-course-description">Learn practical skills and grow with a supportive community.</p>
-                                    <a href="{{ route('register') }}" class="sx-btn-yellow">Join Now <span aria-hidden="true">→</span></a>
+                                    <p class="sx-course-description">Learn practical skills and grow with a supportive
+                                        community.</p>
+                                    <a href="{{ route('register') }}" class="sx-btn-yellow">Join Now <span
+                                            aria-hidden="true">→</span></a>
                                 </div>
                                 <div class="sx-hero-img">
-                                    <img src="{{ asset('images/hero-female-learner.jpg') }}" alt="SKOP-X learner" loading="eager">
+                                    <img src="{{ asset('images/hero-female-learner.jpg') }}" alt="SKOP-X learner"
+                                        loading="eager">
                                 </div>
                             </article>
                         @endforelse
 
-                        @if ($courses->count() > 1)
+                        @if ($heroSlides->count() > 1)
                             <div class="sx-course-controls">
-                                <span class="sx-course-count" aria-live="polite"><span data-course-current>01</span> / {{ str_pad((string) $courses->count(), 2, '0', STR_PAD_LEFT) }}</span>
+                                <span class="sx-course-count" aria-live="polite"><span data-course-current>01</span> /
+                                    {{ str_pad((string) $heroSlides->count(), 2, '0', STR_PAD_LEFT) }}</span>
                                 <div class="sx-course-arrows">
-                                    <button type="button" data-course-previous aria-label="Previous course">←</button>
-                                    <button type="button" data-course-toggle aria-label="Pause automatic slide rotation" aria-pressed="false">Ⅱ</button>
-                                    <button type="button" data-course-next aria-label="Next course">→</button>
+                                    <button type="button" data-course-previous aria-label="Previous slide">←</button>
+                                    <button type="button" data-course-toggle aria-label="Pause automatic slide rotation"
+                                        aria-pressed="false">Ⅱ</button>
+                                    <button type="button" data-course-next aria-label="Next slide">→</button>
                                 </div>
                             </div>
                         @endif
@@ -127,7 +158,8 @@
                             <div class="sx-joining-item">
                                 <div class="sx-joining-avatar">
                                     @if (!empty($joining['avatar']))
-                                        <img src="{{ asset('storage/' . $joining['avatar']) }}" alt="{{ $joining['name'] }}"
+                                        <img src="{{ asset('storage/' . $joining['avatar']) }}"
+                                            alt="{{ $joining['name'] }}"
                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
 
                                         <div class="sx-avatar-placeholder" style="display:none;">
@@ -166,7 +198,8 @@
                         <div class="sx-video-card">
                             <div class="sx-video-thumb">
                                 @if (!empty($video['thumbnail']))
-                                    <img src="{{ asset('images/' . $video['thumbnail']) }}" alt="" loading="lazy">
+                                    <img src="{{ asset('images/' . $video['thumbnail']) }}" alt=""
+                                        loading="lazy">
                                 @endif
                                 <div class="sx-video-play"></div>
                                 <div class="sx-video-duration">{{ $video['duration'] }}</div>
@@ -298,7 +331,8 @@
 
                 const startRotation = () => {
                     pauseRotation();
-                    if (rotationPaused || reducedMotion || document.hidden || carousel.matches(':hover') || carousel.contains(document.activeElement)) return;
+                    if (rotationPaused || reducedMotion || document.hidden || carousel.matches(':hover') || carousel
+                        .contains(document.activeElement)) return;
 
                     rotationTimer = window.setInterval(() => showSlide(activeIndex + 1), 5000);
                 };
@@ -314,7 +348,8 @@
                 rotationToggle.addEventListener('click', () => {
                     rotationPaused = !rotationPaused;
                     rotationToggle.setAttribute('aria-pressed', String(rotationPaused));
-                    rotationToggle.setAttribute('aria-label', rotationPaused ? 'Resume automatic slide rotation' : 'Pause automatic slide rotation');
+                    rotationToggle.setAttribute('aria-label', rotationPaused ?
+                        'Resume automatic slide rotation' : 'Pause automatic slide rotation');
                     rotationToggle.textContent = rotationPaused ? '▶' : 'Ⅱ';
                     startRotation();
                 });

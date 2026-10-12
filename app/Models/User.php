@@ -18,7 +18,9 @@ use Illuminate\Support\Str;
     'phone',
     'phone_verified_at',
     'email',
+    'username',
     'password',
+    'is_admin',
     'address',
     'profile_photo',
     'payment_method',
@@ -47,11 +49,15 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     public const STATUS_PENDING = 'pending';
+
     public const STATUS_ACTIVE = 'active';
 
     public const LEARNING_PENDING = 'pending';
+
     public const LEARNING_IN_PROGRESS = 'in_progress';
+
     public const LEARNING_COMPLETED = 'completed';
+
     public const LEARNING_CERTIFIED = 'certified';
 
     /**
@@ -65,8 +71,14 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'phone_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_admin' => 'boolean',
             'bank_account_number' => 'encrypted',
         ];
+    }
+
+    public function isAdmin(): bool
+    {
+        return (bool) $this->is_admin;
     }
 
     public function isActive(): bool
@@ -141,7 +153,7 @@ class User extends Authenticatable
     public function profilePhotoUrl(): ?string
     {
         if ($this->profile_photo) {
-            return asset('storage/' . $this->profile_photo);
+            return asset('storage/'.$this->profile_photo);
         }
 
         return null;
@@ -161,7 +173,7 @@ class User extends Authenticatable
             return strtoupper(substr($words[0], 0, 2));
         }
 
-        return strtoupper(substr($words[0], 0, 1) . substr(end($words), 0, 1));
+        return strtoupper(substr($words[0], 0, 1).substr(end($words), 0, 1));
     }
 
     /**
@@ -170,7 +182,7 @@ class User extends Authenticatable
     public static function generateUniqueReferralCode(): string
     {
         do {
-            $code = 'SKOPX' . strtoupper(Str::random(6));
+            $code = 'SKOPX'.strtoupper(Str::random(6));
         } while (static::where('referral_code', $code)->exists());
 
         return $code;

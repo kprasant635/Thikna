@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('title', 'Create Account — SKOP-X')
+@section('og_title', 'Join SKOP-X — Skill Today, Better Tomorrow')
+@section('og_description', 'You have been invited to join SKOP-X! Learn in-demand skills, build your network, and unlock career & earning opportunities.')
+@section('og_image', asset('images/skopx-logo.png'))
 @section('minimal-footer', true)
 
 @push('styles')

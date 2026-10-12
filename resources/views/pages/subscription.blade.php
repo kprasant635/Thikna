@@ -520,47 +520,39 @@
 
 
             <!-- 16 Subscription Products Grid -->
-       <div class="products-grid">
-    @foreach ($products as $product)
-        @php
-            $isSelected = in_array($product->id, $selectedProductIds);
-        @endphp
+            <div class="products-grid">
+                @foreach ($products as $product)
+                    @php
+                        $isSelected = in_array($product->id, $selectedProductIds);
+                    @endphp
 
-        <div class="product-card {{ $isSelected ? 'selected' : '' }}"
-            data-id="{{ $product->id }}"
-            @if ($product->course?->img_url)
-                style="background-image: url('{{ asset($product->course->img_url) }}');"
-            @endif
-        >
+                    <div class="product-card {{ $isSelected ? 'selected' : '' }}" data-id="{{ $product->id }}"
+                        @if ($product->course?->img_url) style="background-image: url('{{ asset($product->course->img_url) }}');" @endif>
 
-            <input type="checkbox"
-                name="products[]"
-                value="{{ $product->id }}"
-                id="prod_{{ $product->id }}"
-                {{ $isSelected ? 'checked' : '' }}
-                style="display: none;" />
+                        <input type="checkbox" name="products[]" value="{{ $product->id }}" id="prod_{{ $product->id }}"
+                            {{ $isSelected ? 'checked' : '' }} style="display: none;" />
 
-            <div class="product-overlay"></div>
+                        <div class="product-overlay"></div>
 
-            <div class="check-icon">✓</div>
+                        <div class="check-icon">✓</div>
 
-            <div class="product-content">
-                <div class="product-icon">
-                    {{ $product->icon }}
-                </div>
+                        <div class="product-content">
+                            <div class="product-icon">
+                                {{ $product->icon }}
+                            </div>
 
-                <div class="product-name">
-                    {{ $product->name }}
-                </div>
+                            <div class="product-name">
+                                {{ $product->name }}
+                            </div>
 
-                <div class="product-category">
-                    {{ $product->category }}
-                </div>
+                            <div class="product-category">
+                                {{ $product->category }}
+                            </div>
+                        </div>
+
+                    </div>
+                @endforeach
             </div>
-
-        </div>
-    @endforeach
-</div>
 
         </form>
     </div>
@@ -569,7 +561,7 @@
     <div id="paymentModal" class="modal-backdrop">
         <div class="modal-card">
             <div class="modal-header">
-                <div class="shield-icon">🛡️</div>
+                <img src="{{ asset('images/skopx-logo.png') }}" alt="Skop-X Logo" style="height:48px; margin-bottom:10px;">
                 <h2>Skop-X Secure Payment</h2>
                 <p>Server-Verified Payment Gateway</p>
             </div>

@@ -48,6 +48,18 @@
                 background: #b83271;
             }
 
+            .referral-share-email {
+                background: #ea4335;
+            }
+
+            .referral-share-sms {
+                background: #0284c7;
+            }
+
+            .referral-share-button:hover {
+                opacity: 0.92;
+            }
+
             .referral-share-button:focus-visible {
                 outline: 3px solid #f59e0b;
                 outline-offset: 2px;
@@ -316,7 +328,11 @@
 
                 @php
                     $referralLink = route('register', ['ref' => Auth::user()->referral_code]);
-                    $referralShareText = 'Join SKOP-X using my referral link: ' . $referralLink;
+                    $referralTitle = 'SKOP-X — Skill Today, Better Tomorrow';
+                    $referralShareText = $referralTitle . "\n" . 'Join SKOP-X using my referral link: ' . $referralLink;
+                    $emailSubject = 'Join SKOP-X — Skill Today, Better Tomorrow';
+                    $emailBody = "Hello,\n\nI'd like to invite you to join SKOP-X — Skill Today, Better Tomorrow!\nPeople | Skills | Opportunities | Progress\n\nRegister using my referral link:\n" . $referralLink;
+                    $smsBody = 'Join SKOP-X (Skill Today, Better Tomorrow) using my referral link: ' . $referralLink;
                 @endphp
 
                 <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
@@ -351,6 +367,18 @@
                         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.8" r="1.2" fill="currentColor"/></svg>
                         Instagram
                     </button>
+                    <a class="referral-share-button referral-share-email"
+                        href="mailto:?subject={{ rawurlencode($emailSubject) }}&body={{ rawurlencode($emailBody) }}"
+                        aria-label="Share referral link via Email">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        Email
+                    </a>
+                    <a class="referral-share-button referral-share-sms"
+                        href="sms:?&body={{ rawurlencode($smsBody) }}"
+                        aria-label="Share referral link via SMS">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 11H6v-2h12v2zm0-3H6V7h12v2z"/></svg>
+                        SMS
+                    </a>
                 </div>
                 <div id="copyToast"
                     style="display: none; font-size: 12px; color: #16a34a; font-weight: 600; margin-top: 6px;">
@@ -407,14 +435,34 @@
 
             async function shareReferralOnInstagram() {
                 const linkText = document.getElementById('refLinkText').innerText.trim();
+                const shareTitle = 'SKOP-X — Skill Today, Better Tomorrow';
+                const shareText = `SKOP-X — Skill Today, Better Tomorrow\nJoin using my referral link: ${linkText}`;
+                const logoUrl = @json(asset('images/skopx-logo.png'));
 
                 if (navigator.share) {
                     try {
-                        await navigator.share({
-                            title: 'Join SKOP-X',
-                            text: 'Join SKOP-X using my referral link:',
+                        const shareData = {
+                            title: shareTitle,
+                            text: shareText,
                             url: linkText,
-                        });
+                        };
+
+                        if (navigator.canShare) {
+                            try {
+                                const response = await fetch(logoUrl);
+                                if (response.ok) {
+                                    const blob = await response.blob();
+                                    const file = new File([blob], 'skopx-logo.png', { type: blob.type || 'image/png' });
+                                    if (navigator.canShare({ files: [file] })) {
+                                        shareData.files = [file];
+                                    }
+                                }
+                            } catch (e) {
+                                // Proceed without file if fetching or file attachment is restricted
+                            }
+                        }
+
+                        await navigator.share(shareData);
                         return;
                     } catch (error) {
                         if (error.name === 'AbortError') {
