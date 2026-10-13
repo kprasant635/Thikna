@@ -32,6 +32,11 @@
                 <span class="sidebar-icon">👥</span>
                 My Referral List
             </a>
+            <a href="{{ route('dashboard.genealogy') }}"
+                class="sidebar-link {{ request()->routeIs('dashboard.genealogy*') ? 'active' : '' }}">
+                <span class="sidebar-icon">🌳</span>
+                Genealogy Tree
+            </a>
             <a href="{{ route('courses.index') }}"
                 class="sidebar-link {{ request()->routeIs('courses.*') ? 'active' : '' }}">
                 <span class="sidebar-icon">🎓</span>

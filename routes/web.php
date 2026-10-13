@@ -15,6 +15,7 @@ use App\Http\Controllers\frontend\ContactController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\RentalController;
 use App\Http\Controllers\frontend\ShopController;
+use App\Http\Controllers\GenealogyController;
 use App\Http\Controllers\SubscriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -59,6 +60,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/dashboard/profile', [DashboardController::class, 'updateProfile'])->name('dashboard.profile.update');
     Route::put('/dashboard/payment-details', [DashboardController::class, 'updatePaymentDetails'])->name('dashboard.payment-details.update');
     Route::get('/dashboard/referrals', [DashboardController::class, 'referrals'])->name('dashboard.referrals');
+    Route::get('/dashboard/genealogy', [GenealogyController::class, 'index'])->name('dashboard.genealogy');
+    Route::get('/dashboard/genealogy/tree', [GenealogyController::class, 'treeData'])->name('dashboard.genealogy.tree');
+    Route::get('/dashboard/genealogy/node/{user}/children', [GenealogyController::class, 'nodeChildren'])->name('dashboard.genealogy.children');
+    Route::get('/dashboard/genealogy/search', [GenealogyController::class, 'search'])->name('dashboard.genealogy.search');
+    Route::get('/dashboard/genealogy/member/{user}', [GenealogyController::class, 'memberDetails'])->name('dashboard.genealogy.member');
     Route::get('/dashboard/idcard/download', [DashboardController::class, 'downloadIdCard'])->name('dashboard.idcard.download');
     Route::get('/business-pdf/download', [DashboardController::class, 'downloadPdf'])
         ->name('business.pdf.download');
@@ -108,6 +114,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('admin')->group(function () {
         Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::get('/referrals', [AdminReferralController::class, 'index'])->name('referrals');
+        Route::get('/genealogy', [GenealogyController::class, 'adminIndex'])->name('genealogy');
 
         // Landing Page Sliders Settings
         Route::get('/sliders', [AdminSliderController::class, 'index'])->name('sliders.index');

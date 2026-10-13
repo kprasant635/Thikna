@@ -347,7 +347,7 @@ class RegistrationTest extends TestCase
         $this->assertEquals('AD', $userSingle->initials());
 
         $code = User::generateUniqueReferralCode();
-        $this->assertStringStartsWith('THK', $code);
-        $this->assertEquals(9, strlen($code));
+        $this->assertStringStartsWith('SKOPX', $code);
+        $this->assertEquals(11, strlen($code));
     }
 }

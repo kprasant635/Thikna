@@ -385,6 +385,14 @@
                     </a>
                 </li>
 
+                <li class="horizontal-item">
+                    <a href="{{ route('admin.genealogy') }}"
+                        class="horizontal-link {{ request()->routeIs('admin.genealogy*') ? 'active' : '' }}">
+                        <span class="menu-icon">🌳</span>
+                        <span>Genealogy Tree</span>
+                    </a>
+                </li>
+
                 <li class="horizontal-item nav-dropdown-wrapper">
                     <a href="{{ route('admin.sliders.index') }}"
                         class="horizontal-link {{ request()->routeIs('admin.sliders*') ? 'active' : '' }}">
