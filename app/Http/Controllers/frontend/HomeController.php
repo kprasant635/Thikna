@@ -43,6 +43,7 @@ class HomeController extends Controller
         $recentJoinings = $recentJoiningsQuery
             ->latest()
             ->limit(5)
+            ->where('name','<>','System Admin')
             ->get(['id', 'name', 'address', 'referral_code', 'created_at', 'profile_photo'])
             ->map(fn (User $user): array => [
                 'name' => $user->name,
