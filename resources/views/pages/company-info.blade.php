@@ -7,7 +7,7 @@
         <section class="info-hero">
             <div class="wrap info-hero-container">
                 <div class="info-badge">Official SKOP-X Information Hub</div>
-                <h1 class="info-title">Company Information</h1>
+                <h1 class="info-title" style="color:#fff;font-family:'Poppins',sans-serif;font-size:24px;font-weight:700;">Company Information</h1>
                 <p class="info-subtitle">
                     Scan to explore SKOP-X — office details, objectives, learning content, fitness, cooking,
                     economic awareness, tourism, and media resources.

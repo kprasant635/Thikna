@@ -55,7 +55,9 @@
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Joining Date</span>
-                        <span class="detail-value">{{ $employee->created_at->format('d M Y') }}</span>
+                        <span class="detail-value">
+                            {{ $employee->created_at ? $employee->created_at->format('d M Y') : 'Not available' }}
+                        </span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Current Level / Achievement</span>
