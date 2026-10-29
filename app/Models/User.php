@@ -177,6 +177,49 @@ class User extends Authenticatable
     }
 
     /**
+     * Get the employee's designation / position.
+     * Derived dynamically from role and certification status.
+     */
+    public function designation(): string
+    {
+        if ($this->isAdmin()) {
+            return 'Administrator';
+        }
+
+        if ($this->isCertified()) {
+            return 'Certified Trainer';
+        }
+
+        if ($this->learning_status === self::LEARNING_COMPLETED) {
+            return 'Certified Member';
+        }
+
+        if ($this->learning_status === self::LEARNING_IN_PROGRESS) {
+            return 'Active Member';
+        }
+
+        return 'Member';
+    }
+
+    /**
+     * Get the employee's current achievement level.
+     * Reflects the latest learning/certification progress.
+     */
+    public function achievementLevel(): string
+    {
+        if ($this->isCertified()) {
+            return 'Certified';
+        }
+
+        return match ($this->learning_status) {
+            self::LEARNING_COMPLETED => 'Course Completed',
+            self::LEARNING_IN_PROGRESS => 'In Progress',
+            self::LEARNING_PENDING => 'Enrolled',
+            default => 'Enrolled',
+        };
+    }
+
+    /**
      * Generate a unique referral code.
      */
     public static function generateUniqueReferralCode(): string

@@ -11,10 +11,13 @@ use App\Http\Controllers\CertificateController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\frontend\BusinessController;
+use App\Http\Controllers\frontend\CompanyInfoController;
 use App\Http\Controllers\frontend\ContactController;
+use App\Http\Controllers\frontend\EmployeeProfileController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\RentalController;
 use App\Http\Controllers\frontend\ShopController;
+use App\Http\Controllers\frontend\TermsAndConditionsController;
 use App\Http\Controllers\GenealogyController;
 use App\Http\Controllers\SubscriptionController;
 use Illuminate\Http\Request;
@@ -25,6 +28,12 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/course-catalog', [CourseController::class, 'catalog'])->name('courses.catalog');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::post('/contact', [ContactController::class, 'submit'])->name('contact.submit');
+
+Route::get('/company-info', [CompanyInfoController::class, 'index'])->name('company.info');
+
+Route::get('/employee-profile/{user}', [EmployeeProfileController::class, 'show'])->name('employee.profile');
+
+Route::get('/terms-and-conditions', [TermsAndConditionsController::class, 'index'])->name('terms.conditions');
 
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.submit');

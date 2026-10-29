@@ -146,6 +146,23 @@
             margin-top: 4px;
             font-weight: bold;
         }
+        .id-qr {
+            margin-top: 14px;
+            text-align: center;
+        }
+        .id-qr-img {
+            width: 110px;
+            height: 110px;
+            border-radius: 8px;
+            border: 2px solid #0f5e2e;
+            background: #ffffff;
+            padding: 4px;
+        }
+        .id-qr-label {
+            font-size: 8.5px;
+            color: #64748b;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
@@ -206,6 +223,14 @@
                     <td class="info-val">{{ $user->created_at->format('M Y') }}</td>
                 </tr>
             </table>
+
+            <!-- Personal QR Code -> Digital Employee Profile -->
+            <div class="id-qr">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&amp;qzone=2&amp;ecc=M&amp;data={{ urlencode(route('employee.profile', $user)) }}"
+                     alt="Scan to view digital employee profile"
+                     class="id-qr-img">
+                <div class="id-qr-label">Scan to open Digital Employee Profile</div>
+            </div>
         </div>
 
         <div class="id-footer">

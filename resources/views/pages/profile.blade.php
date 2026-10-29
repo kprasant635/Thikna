@@ -260,12 +260,21 @@
                                     <span class="vval">{{ Auth::user()->created_at->format('M Y') }}</span>
                                 </div>
                             </div>
+
+                            <!-- Personal QR Code -> Digital Employee Profile -->
+                            <div class="vcard-qr">
+                                <span class="vlabel">Digital Profile QR</span>
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&amp;qzone=2&amp;ecc=M&amp;data={{ urlencode(route('employee.profile', Auth::user())) }}"
+                                     alt="Scan to view digital employee profile"
+                                     class="vcard-qr-img">
+                                <p class="vcard-qr-hint">Scan to open Digital Employee Profile</p>
+                            </div>
                         </div>
 
-                        <div class="vcard-footer">
+                        {{-- <div class="vcard-footer">
                             <div class="vcard-auth">VERIFIED DIGITAL IDENTITY</div>
                             <div class="vcard-barcode">||| |||| | ||| || |||| |||</div>
-                        </div>
+                        </div> --}}
                     </div>
 
                     <!-- ID Card Download Buttons -->
@@ -817,6 +826,220 @@
                     color: #334155;
                     margin-top: 2px;
                 }
+
+                .vcard-qr {
+                    margin-top: 14px;
+                    text-align: center;
+                }
+
+                .vcard-qr-img {
+                    width: 110px;
+                    height: 110px;
+                    border-radius: 8px;
+                    border: 2px solid #0f5e2e;
+                    background: #ffffff;
+                    padding: 6px;
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                }
+
+                .vcard-qr-hint {
+                    font-size: 9.5px;
+                    color: #64748b;
+                    margin-top: 6px;
+                }
+
+
+                
+/* Virtual Member ID Card - alignment fixes */
+.virtual-id-card {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Logo and card header */
+.vcard-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 5px;
+}
+
+.vcard-brand {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vcard-brand img {
+    display: block;
+    max-width: 150px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.vcard-title {
+    text-align: center;
+    width: 100%;
+}
+
+/* Member photo */
+.vcard-photo-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 12px auto;
+}
+
+.vcard-photo {
+    display: block;
+    object-fit: cover;
+}
+
+/* Member name and ID */
+.vcard-body {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.vcard-name {
+    text-align: center;
+    overflow-wrap: anywhere;
+    margin-bottom: 6px;
+}
+
+.vcard-id-badge {
+    width: fit-content;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto 12px;
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+/* Details grid */
+.vcard-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.vcard-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr);
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.vlabel {
+    min-width: 0;
+}
+
+.vval {
+    min-width: 0;
+    text-align: right;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+/* QR section: centered label, QR and hint */
+.vcard-qr {
+    position: static;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    margin: 16px auto 10px;
+    padding: 0;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.vcard-qr > .vlabel {
+    display: block;
+    width: 100%;
+    text-align: center;
+    margin: 0;
+}
+
+.vcard-qr-img {
+    display: block;
+    position: static;
+    float: none;
+    width: 110px;
+    height: 110px;
+    max-width: 100%;
+    box-sizing: border-box;
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+.vcard-qr-hint {
+    display: block;
+    width: 100%;
+    margin: 0;
+    text-align: center;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+/* Card footer */
+.vcard-footer {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.vcard-auth,
+.vcard-barcode {
+    text-align: center;
+}
+
+/* Download and print buttons */
+.id-card-actions {
+    width: 100%;
+    max-width: 320px;
+    margin: 16px auto 0;
+    box-sizing: border-box;
+}
+
+.id-card-actions .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* Small screens */
+@media (max-width: 400px) {
+    .virtual-id-card {
+        max-width: 100%;
+    }
+
+    .vcard-item {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+        gap: 6px;
+    }
+
+    .vcard-qr-img {
+        width: 100px;
+        height: 100px;
+    }
+}
+
             </style>
         @endpush
 
